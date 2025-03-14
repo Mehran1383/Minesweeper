@@ -2,21 +2,28 @@
 #define SQUAREBUTTONGRID_H
 
 #include <QApplication>
-#include <QWidget>
 #include <QPushButton>
 #include <QGridLayout>
-#include <QResizeEvent>
 
-class SquareButtonGrid : public QWidget {
+#include "gamelogic.h"
+
+class SquareButtonGrid : public QObject
+{
+    Q_OBJECT
+
 public:
-    SquareButtonGrid(QWidget *parent = nullptr, QGridLayout* gridLayout = nullptr);
+    SquareButtonGrid(QGridLayout* gridLayout = nullptr);
     ~SquareButtonGrid();
 
-    void createMap(int row, int col);
+    void createMap(int row, int col, int numOfMins);
+
+private slots:
+    void updateMap();
 
 private:
     QGridLayout* gridLayout;
     QPushButton*** buttonsMap;
+    GameLogic* logic;
 };
 
 

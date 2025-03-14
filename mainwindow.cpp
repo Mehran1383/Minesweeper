@@ -43,19 +43,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_mode1_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->gamePage, ui->gridLayout_4);
-    gameBoard->createMap(8, 8);
+    gameBoard = new SquareButtonGrid(ui->gridLayout_4);
+    gameBoard->createMap(8, 8, 10);
 
 }
 
 void MainWindow::on_mode2_clicked()
 {
-    //createMap(16, 16);
+    gameBoard = new SquareButtonGrid(ui->gridLayout_4);
+    gameBoard->createMap(16, 16, 40);
 }
 
 void MainWindow::on_mode3_clicked()
 {
-    //createMap(30, 16);
+    gameBoard = new SquareButtonGrid(ui->gridLayout_4);
+    gameBoard->createMap(24, 24, 99);
 }
 
 
