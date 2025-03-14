@@ -6,14 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>406</width>
-    <height>429</height>
+    <width>600</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>400</width>
-    <height>400</height>
+    <width>600</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>500</height>
    </size>
   </property>
   <property name="baseSize">
@@ -193,29 +199,19 @@
       <widget class="QWidget" name="gamePage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="mainLayout">
-          <item>
-           <layout class="QGridLayout" name="buttonsLayout"/>
-          </item>
-          <item>
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+         <layout class="QGridLayout" name="buttonsLayout">
+          <item row="5" column="1">
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
             </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
-            <property name="spacing">
-             <number>5</number>
+            <property name="leftMargin">
+             <number>0</number>
             </property>
             <item>
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::MinimumExpanding</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -311,6 +307,9 @@
             </item>
            </layout>
           </item>
+          <item row="0" column="0" rowspan="6">
+           <layout class="QGridLayout" name="gridLayout_4"/>
+          </item>
          </layout>
         </item>
        </layout>
@@ -324,7 +323,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>406</width>
+     <width>600</width>
      <height>23</height>
     </rect>
    </property>

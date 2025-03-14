@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include <qdebug.h>
-void animateTransition(QStackedWidget *stackedWidget, int newIndex);
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,47 +13,70 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon(":/assets/logo.ico"));
     ui->stackedWidget->setCurrentIndex(0);
 
-    QStackedWidget *stackWidget = ui->stackedWidget;
+    connect(ui->mode1, &QPushButton::clicked,
+            this, &MainWindow::animateTransition);
 
-    connect(ui->mode1, &QPushButton::clicked, [stackWidget]() {
-        animateTransition(stackWidget, 1);
-    });
+    connect(ui->mode2, &QPushButton::clicked,
+            this, &MainWindow::animateTransition);
 
-    connect(ui->mode2, &QPushButton::clicked, [stackWidget]() {
-        animateTransition(stackWidget, 1);
-    });
+    connect(ui->mode3, &QPushButton::clicked,
+            this, &MainWindow::animateTransition);
 
-    connect(ui->mode3, &QPushButton::clicked, [stackWidget]() {
-        animateTransition(stackWidget, 1);
-    });
+    connect(ui->customMode, &QPushButton::clicked,
+            this, &MainWindow::animateTransition);
 
-    connect(ui->customMode, &QPushButton::clicked, [stackWidget]() {
-        animateTransition(stackWidget, 1);
-    });
+    connect(ui->changeDifficulty, &QPushButton::clicked,
+            this, &MainWindow::animateTransition);
 
-    connect(ui->changeDifficulty, &QPushButton::clicked, [stackWidget]() {
-        animateTransition(stackWidget, 0);
-    });
+
 
 
 }
 
 MainWindow::~MainWindow()
 {
+    if(gameBoard != nullptr)
+        delete gameBoard;
+
     delete ui;
 }
 
-// Function to animate the transition
-void animateTransition(QStackedWidget *stackedWidget, int newIndex)
+void MainWindow::on_mode1_clicked()
 {
-    int currentIndex = stackedWidget->currentIndex();
-    if (currentIndex == newIndex) return;
+    gameBoard = new SquareButtonGrid(ui->gamePage, ui->gridLayout_4);
+    gameBoard->createMap(8, 8);
 
-    QWidget *currentWidget = stackedWidget->widget(currentIndex);
-    QWidget *nextWidget = stackedWidget->widget(newIndex);
+}
 
-    int width = stackedWidget->width();
-    int height = stackedWidget->height();
+void MainWindow::on_mode2_clicked()
+{
+    //createMap(16, 16);
+}
+
+void MainWindow::on_mode3_clicked()
+{
+    //createMap(30, 16);
+}
+
+
+
+void MainWindow::on_changeDifficulty_clicked()
+{
+    delete gameBoard;
+    gameBoard = nullptr;
+}
+
+
+void MainWindow::animateTransition()
+{
+    int currentIndex = ui->stackedWidget->currentIndex();
+    int newIndex = (currentIndex + 1) % 2;
+
+    QWidget *currentWidget = ui->stackedWidget->widget(currentIndex);
+    QWidget *nextWidget = ui->stackedWidget->widget(newIndex);
+
+    int width = ui->stackedWidget->width();
+    int height = ui->stackedWidget->height();
 
     // Ensure the next widget is positioned to the right of the stacked widget
     nextWidget->setGeometry(width, 0, width, height);
@@ -87,46 +110,12 @@ void animateTransition(QStackedWidget *stackedWidget, int newIndex)
     animationNext->setParent(animationGroup);
 
     // Set the current index of the stacked widget to the new index after the animation finishes
-    QObject::connect(animationGroup, &QParallelAnimationGroup::finished, [stackedWidget, newIndex, animationGroup]() {
-        stackedWidget->setCurrentIndex(newIndex);
+    QStackedWidget* stack = ui->stackedWidget;
+    QObject::connect(animationGroup, &QParallelAnimationGroup::finished, [stack, newIndex, animationGroup]() {
+        stack->setCurrentIndex(newIndex);
         animationGroup->deleteLater();
     });
 
     // Start the animation
     animationGroup->start();
-}
-
-void MainWindow::createMap(int row, int col)
-{
-    for(int i = 0 ; i < row ; i++){
-        for(int j = 0 ; j < col; j++){
-            Map1[i][j] = new QPushButton;
-            Map1[i][j]->setMinimumSize(25, 25);
-            ui->buttonsLayout->addWidget(Map1[i][j], i, j);
-        }
-    }
-    ui->buttonsLayout->setVerticalSpacing(0);
-    ui->buttonsLayout->setHorizontalSpacing(1);
-}
-
-void MainWindow::on_mode1_clicked()
-{
-    createMap(8, 8);
-}
-
-void MainWindow::on_mode2_clicked()
-{
-    //createMap(16, 16);
-}
-
-void MainWindow::on_mode3_clicked()
-{
-    //createMap(30, 16);
-}
-
-
-
-void MainWindow::on_changeDifficulty_clicked()
-{
-
 }

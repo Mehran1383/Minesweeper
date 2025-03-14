@@ -5,7 +5,8 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QStackedWidget>
-#include <QPushButton>
+
+#include "squarebuttongrid.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -19,8 +20,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void createMap(int row, int col);
-
 private slots:
     void on_mode1_clicked();
 
@@ -28,14 +27,14 @@ private slots:
 
     void on_mode3_clicked();
 
-
     void on_changeDifficulty_clicked();
+
+    void animateTransition();
 
 private:
     Ui::MainWindow *ui;
+    SquareButtonGrid* gameBoard;
 
-    bool map1[8][8];
-    QPushButton* Map1[8][8];
 };
 
 #endif // MAINWINDOW_H

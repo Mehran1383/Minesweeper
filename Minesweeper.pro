@@ -17,10 +17,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    squarebuttongrid.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    squarebuttongrid.h
 
 FORMS += \
     mainwindow.ui
