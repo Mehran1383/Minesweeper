@@ -27,10 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->changeDifficulty, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
-
-
-
-
 }
 
 MainWindow::~MainWindow()
@@ -43,24 +39,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_mode1_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->gridLayout_4);
-    gameBoard->createMap(8, 8, 10);
+    gameBoard = new SquareButtonGrid(ui->mapLayout, 8, 8, 10);
 
 }
 
 void MainWindow::on_mode2_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->gridLayout_4);
-    gameBoard->createMap(16, 16, 40);
+    gameBoard = new SquareButtonGrid(ui->mapLayout, 16, 16, 40);
 }
 
 void MainWindow::on_mode3_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->gridLayout_4);
-    gameBoard->createMap(24, 24, 99);
+    gameBoard = new SquareButtonGrid(ui->mapLayout, 24, 24, 99);
 }
-
-
 
 void MainWindow::on_changeDifficulty_clicked()
 {

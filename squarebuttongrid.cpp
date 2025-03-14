@@ -1,18 +1,9 @@
 #include "squarebuttongrid.h"
 #include <qdebug.h>
-SquareButtonGrid::SquareButtonGrid(QGridLayout* layout)
+SquareButtonGrid::SquareButtonGrid(QGridLayout* layout, int row, int col, int numOfMins)
 {
     this->gridLayout = layout;
-}
 
-SquareButtonGrid::~SquareButtonGrid()
-{
-    delete [] buttonsMap;
-    delete logic;
-}
-
-void SquareButtonGrid::createMap(int row, int col, int numOfMins)
-{
     logic = new GameLogic(row, col, numOfMins);
     logic->rowNum = row;
     logic->colNum = col;
@@ -37,8 +28,15 @@ void SquareButtonGrid::createMap(int row, int col, int numOfMins)
     }
     gridLayout->setVerticalSpacing(0);
     gridLayout->setHorizontalSpacing(0);
+}
 
+SquareButtonGrid::~SquareButtonGrid()
+{
+    for(int i = 0 ; i < logic->rowNum ; i++)
+        for(int j = 0 ; j < logic->colNum ; j++)
+            delete buttonsMap[i][j];
 
+    delete logic;
 }
 
 void SquareButtonGrid::updateMap()
@@ -47,7 +45,7 @@ void SquareButtonGrid::updateMap()
         for(int j = 0 ; j < logic->colNum ; j++){
             if(logic->map[i][j] == 0){
                 buttonsMap[i][j]->setDisabled(1);
-                buttonsMap[i][j]->setStyleSheet("background-color:#60798B; border :3px solid #60798B;");
+                buttonsMap[i][j]->setStyleSheet("background-color:#60798B; border-radius: 0px;");
             }
         }
     }

@@ -12,10 +12,8 @@ class SquareButtonGrid : public QObject
     Q_OBJECT
 
 public:
-    SquareButtonGrid(QGridLayout* gridLayout = nullptr);
+    SquareButtonGrid(QGridLayout* gridLayout = nullptr, int row = 8, int col = 8, int numOfMins = 10);
     ~SquareButtonGrid();
-
-    void createMap(int row, int col, int numOfMins);
 
 private slots:
     void updateMap();
