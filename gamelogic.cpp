@@ -20,7 +20,7 @@ GameLogic::GameLogic(int Row, int Col, int numOfMins)
             mins[i][j] = false;
             map[i][j] = -1;
         }
-    while(numOfMins > 0){
+    while(numOfMins >= 0){
         randomRow = QRandomGenerator::global()->bounded(0, rowNum);
         randomCol = QRandomGenerator::global()->bounded(0, colNum);
         if(mins[randomRow][randomCol] != true){
@@ -38,11 +38,19 @@ GameLogic::~GameLogic()
 
 void GameLogic::buttonClicked(int row, int col)
 {
-//    for(int i = 0 ; i < row ; i++){
-//        for(int j = 0 ; j < col ; j++){
+    if(mins[row][col]){
+        minRow = row;
+        minCol = col;
+        emit userFailed();
+        return;
+    }
 
-//        }
-//    }
+
+    for(int i = 0 ; i < rowNum ; i++){
+        for(int j = 0 ; j < colNum ; j++){
+
+        }
+    }
     map[row][col] = 0;
 
     emit finished();

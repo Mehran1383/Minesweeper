@@ -5,6 +5,7 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QStackedWidget>
+#include <QTimer>
 
 #include "squarebuttongrid.h"
 
@@ -31,9 +32,14 @@ private slots:
 
     void animateTransition();
 
+    void on_pause_clicked();
+
+    void updatePauseButton();
+
 private:
     Ui::MainWindow *ui;
     SquareButtonGrid* gameBoard;
+    QTimer* timer;
 
 };
 

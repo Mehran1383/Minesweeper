@@ -17,12 +17,17 @@ public:
     int rowNum;
     int colNum;
     int** map;
+    bool** mins;
+    int minRow;
+    int minCol;
 
 signals:
     void finished();
+    void userFailed();
+    void userWon();
 
-private:
-    bool** mins;
+
+
 
 
 };

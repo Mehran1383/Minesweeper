@@ -10,8 +10,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     setWindowTitle(tr("Minesweeper"));
-    setWindowIcon(QIcon(":/assets/logo.ico"));
+    setWindowIcon(QIcon(":/icons/logo.ico"));
     ui->stackedWidget->setCurrentIndex(0);
+
+    // Timer setup
+    timer = new QTimer(this);
+    timer->setInterval(1000);
 
     connect(ui->mode1, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
@@ -27,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->changeDifficulty, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
+
 }
 
 MainWindow::~MainWindow()
@@ -39,24 +44,49 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_mode1_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->mapLayout, 8, 8, 10);
+    gameBoard = new SquareButtonGrid(ui->mapLayout, timer, 8, 8, 10);
+    connect(gameBoard, &SquareButtonGrid::timerStarted,
+            this, &MainWindow::updatePauseButton);
 
 }
 
 void MainWindow::on_mode2_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->mapLayout, 16, 16, 40);
+    gameBoard = new SquareButtonGrid(ui->mapLayout, timer, 16, 16, 40);
+    connect(gameBoard, &SquareButtonGrid::timerStarted,
+            this, &MainWindow::updatePauseButton);
 }
 
 void MainWindow::on_mode3_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->mapLayout, 24, 24, 99);
+    gameBoard = new SquareButtonGrid(ui->mapLayout, timer, 24, 24, 99);
+    connect(gameBoard, &SquareButtonGrid::timerStarted,
+            this, &MainWindow::updatePauseButton);
 }
 
 void MainWindow::on_changeDifficulty_clicked()
 {
     delete gameBoard;
     gameBoard = nullptr;
+
+    timer->stop();
+    ui->pause->setText("Pause");
+}
+
+void MainWindow::on_pause_clicked()
+{
+    if(timer->isActive()){
+        timer->stop();
+        ui->pause->setText("Resume");
+    }else{
+        timer->start();
+        ui->pause->setText("Pause");
+    }
+}
+
+void MainWindow::updatePauseButton()
+{
+    ui->pause->setText("Pause");
 }
 
 
@@ -112,3 +142,5 @@ void MainWindow::animateTransition()
     // Start the animation
     animationGroup->start();
 }
+
+

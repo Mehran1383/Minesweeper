@@ -212,7 +212,8 @@
     <qresource prefix="/qdarkstyle/dark">
         <file>darkstyle.qss</file>
     </qresource>
-    <qresource prefix="/assets">
-        <file>logo.ico</file>
+    <qresource prefix="/assets"/>
+    <qresource prefix="/">
+        <file>icons/logo.ico</file>
     </qresource>
 </RCC>
