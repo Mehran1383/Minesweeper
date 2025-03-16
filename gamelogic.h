@@ -4,6 +4,7 @@
 #include <QRandomGenerator>
 #include <QObject>
 
+
 class GameLogic : public QObject
 {
     Q_OBJECT
@@ -13,6 +14,7 @@ public:
     ~GameLogic();
 
     void buttonClicked(int row, int col);
+    void checkNeighbors(int row, int col);
 
     int rowNum;
     int colNum;
@@ -25,10 +27,6 @@ signals:
     void finished();
     void userFailed();
     void userWon();
-
-
-
-
 
 };
 

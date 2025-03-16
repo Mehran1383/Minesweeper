@@ -6,6 +6,8 @@
 #include <QGridLayout>
 #include <QTimer>
 
+#include <string>
+
 #include "gamelogic.h"
 
 class SquareButtonGrid : public QObject
