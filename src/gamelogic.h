@@ -16,12 +16,14 @@ public:
     void buttonClicked(int row, int col);
     void checkNeighbors(int row, int col);
 
+
     int rowNum;
     int colNum;
     int** map;
     bool** mins;
     int minRow;
     int minCol;
+
 
 signals:
     void finished();

@@ -215,5 +215,6 @@
     <qresource prefix="/assets"/>
     <qresource prefix="/">
         <file>icons/logo.ico</file>
+        <file>icons/flag.png</file>
     </qresource>
 </RCC>

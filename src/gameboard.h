@@ -3,11 +3,13 @@
 
 #include <QTimer>
 #include <QGridLayout>
+#include <QEvent>
+#include <QMouseEvent>
 
 #include <string>
 
 #include "gamelogic.h"
-#include "squarebuttongrid.h"
+#include "squarebutton.h"
 
 class GameBoard : public QWidget
 {
@@ -16,6 +18,8 @@ class GameBoard : public QWidget
 public:
     GameBoard(QWidget* parent = nullptr, QGridLayout* gridLayout = nullptr, QTimer* timer = nullptr, int row = 8, int col = 8, int numOfMins = 10);
     ~GameBoard() override;
+
+    void resizeButtons();
 
 private slots:
     void updateMap();
@@ -30,7 +34,7 @@ protected:
 
 private:
     QGridLayout* gridLayout;
-    SquareButtonGrid*** buttonsMap;
+    SquareButton*** buttonsMap;
     GameLogic* logic;
     QTimer* timer;
     QWidget* parent;

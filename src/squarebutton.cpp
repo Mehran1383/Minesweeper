@@ -1,6 +1,6 @@
-#include "squarebuttongrid.h"
+#include "squarebutton.h"
 
-SquareButtonGrid::SquareButtonGrid(QWidget* parent) : QPushButton(parent)
+SquareButton::SquareButton(QWidget* parent) : QPushButton(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setCursor(Qt::PointingHandCursor);

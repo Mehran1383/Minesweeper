@@ -20,13 +20,13 @@ SOURCES += \
     gamelogic.cpp \
     main.cpp \
     mainwindow.cpp \
-    squarebuttongrid.cpp
+    squarebutton.cpp
 
 HEADERS += \
     gameboard.h \
     gamelogic.h \
     mainwindow.h \
-    squarebuttongrid.h
+    squarebutton.h
 
 FORMS += \
     mainwindow.ui

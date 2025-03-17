@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     timer = new QTimer(this);
     timer->setInterval(1000);
 
+    this->gameBoard = nullptr;
+
     connect(ui->mode1, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
 
