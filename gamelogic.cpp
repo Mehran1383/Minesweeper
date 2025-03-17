@@ -45,25 +45,7 @@ void GameLogic::buttonClicked(int row, int col)
         return;
     }
 
-    map[row][col] = -1;
     checkNeighbors(row, col);
-
-    if(row > 0 && col > 0)
-        checkNeighbors(row-1, col-1);
-    if(row > 0)
-        checkNeighbors(row-1, col);
-    if(row > 0 && col+1 < colNum)
-        checkNeighbors(row-1, col+1);
-    if(col > 0)
-        checkNeighbors(row, col-1);
-    if(col+1 < colNum)
-        checkNeighbors(row, col+1);
-    if(row+1 < rowNum && col > 0)
-        checkNeighbors(row+1, col-1);
-    if(row+1 < rowNum)
-        checkNeighbors(row+1, col);
-    if(row+1 < rowNum && col+1 < colNum)
-        checkNeighbors(row+1, col+1);
 
     emit finished();
 }

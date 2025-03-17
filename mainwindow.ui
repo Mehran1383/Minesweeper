@@ -6,26 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>500</height>
+    <width>406</width>
+    <height>429</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>600</width>
-    <height>500</height>
+    <width>400</width>
+    <height>300</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>600</width>
-    <height>500</height>
+    <width>16777215</width>
+    <height>16777215</height>
    </size>
   </property>
   <property name="baseSize">
    <size>
-    <width>500</width>
-    <height>500</height>
+    <width>400</width>
+    <height>300</height>
    </size>
   </property>
   <property name="mouseTracking">
@@ -39,7 +45,7 @@
     <item row="0" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="mainPage">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -60,8 +66,8 @@
           <property name="spacing">
            <number>50</number>
           </property>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="mode2">
+          <item row="1" column="0">
+           <widget class="QPushButton" name="mode3">
             <property name="minimumSize">
              <size>
               <width>150</width>
@@ -78,14 +84,16 @@
              <font>
               <family>Showcard Gothic</family>
               <pointsize>20</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
             <property name="text">
-             <string>16 x 16 
- 40 mines</string>
+             <string>24 x 24 
+ 99 mines</string>
             </property>
            </widget>
           </item>
@@ -115,37 +123,6 @@
             <property name="text">
              <string>? 
  Custom</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="mode3">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>500</width>
-              <height>500</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Showcard Gothic</family>
-              <pointsize>20</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="text">
-             <string>24 x 24 
- 99 mines</string>
             </property>
            </widget>
           </item>
@@ -192,6 +169,35 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="mode2">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>500</width>
+              <height>500</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Showcard Gothic</family>
+              <pointsize>20</pointsize>
+             </font>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="text">
+             <string>16 x 16 
+ 40 mines</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -201,7 +207,11 @@
         <item>
          <layout class="QGridLayout" name="buttonsLayout">
           <item row="0" column="0" rowspan="6">
-           <layout class="QGridLayout" name="mapLayout"/>
+           <layout class="QGridLayout" name="layout">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="mapLayout"/>
+            </item>
+           </layout>
           </item>
           <item row="5" column="1">
            <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -227,7 +237,7 @@
             <item>
              <widget class="QPushButton" name="startOver_4">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -235,7 +245,7 @@
               <property name="maximumSize">
                <size>
                 <width>200</width>
-                <height>200</height>
+                <height>30</height>
                </size>
               </property>
               <property name="font">
@@ -255,7 +265,7 @@
             <item>
              <widget class="QPushButton" name="changeDifficulty">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -263,7 +273,7 @@
               <property name="maximumSize">
                <size>
                 <width>200</width>
-                <height>200</height>
+                <height>30</height>
                </size>
               </property>
               <property name="font">
@@ -283,15 +293,21 @@
             <item>
              <widget class="QPushButton" name="pause">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>200</width>
-                <height>200</height>
+                <height>30</height>
                </size>
               </property>
               <property name="font">
@@ -323,7 +339,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>406</width>
      <height>23</height>
     </rect>
    </property>

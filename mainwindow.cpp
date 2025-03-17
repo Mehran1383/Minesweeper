@@ -44,23 +44,26 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_mode1_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->mapLayout, timer, 8, 8, 10);
-    connect(gameBoard, &SquareButtonGrid::timerStarted,
+    gameBoard = new GameBoard(this, ui->mapLayout, timer, 8, 8, 10);
+    this->installEventFilter(gameBoard);
+    connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
 
 }
 
 void MainWindow::on_mode2_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->mapLayout, timer, 16, 16, 40);
-    connect(gameBoard, &SquareButtonGrid::timerStarted,
+    gameBoard = new GameBoard(this, ui->mapLayout, timer, 16, 16, 40);
+    this->installEventFilter(gameBoard);
+    connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
 }
 
 void MainWindow::on_mode3_clicked()
 {
-    gameBoard = new SquareButtonGrid(ui->mapLayout, timer, 24, 24, 99);
-    connect(gameBoard, &SquareButtonGrid::timerStarted,
+    gameBoard = new GameBoard(this, ui->mapLayout, timer, 24, 24, 99);
+    this->installEventFilter(gameBoard);
+    connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
 }
 

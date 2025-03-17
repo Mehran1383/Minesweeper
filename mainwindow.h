@@ -7,7 +7,7 @@
 #include <QStackedWidget>
 #include <QTimer>
 
-#include "squarebuttongrid.h"
+#include "gameboard.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,7 +38,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    SquareButtonGrid* gameBoard;
+    GameBoard* gameBoard;
     QTimer* timer;
 
 };
