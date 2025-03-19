@@ -5,6 +5,8 @@ GameBoard::GameBoard(QWidget* parent, QGridLayout* layout, QTimer* timer, int ro
     this->gridLayout = layout;
     this->timer = timer;
     this->parent = parent;
+    this->remaindFlags = numOfMins;
+    this->gameIsFinished = false;
 
     logic = new GameLogic(row, col, numOfMins);
     logic->rowNum = row;
@@ -57,7 +59,7 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
     }
 
     // Check for right-click on the button
-    if (obj->inherits("QPushButton") && event->type() == QEvent::MouseButtonPress) {
+    if (obj->inherits("QPushButton") && event->type() == QEvent::MouseButtonPress && !gameIsFinished) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         if (mouseEvent->button() == Qt::RightButton) {
             // Find the button that was right-clicked
@@ -65,21 +67,28 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
                 for(int j = 0 ; j < logic->colNum ; j++){
                     if (buttonsMap[i][j] == obj) {
                         // Change the icon of the button
-                        if(logic->map[i][j] == 0){
+                        if(logic->map[i][j] == 0 && remaindFlags > 0){
                             buttonsMap[i][j]->setIcon(QIcon(":/icons/flag.png"));
                             buttonsMap[i][j]->setCursor(Qt::ArrowCursor);
                             logic->map[i][j] = -2;
+                            remaindFlags--;
+                            if(remaindFlags == 0 && logic->checkFlags()){
+                                gamefinished();
+                                gameIsFinished = true;
+                            }
                         }
                         else if(logic->map[i][j] == -2){
                             buttonsMap[i][j]->setIcon(QIcon());
                             buttonsMap[i][j]->setCursor(Qt::PointingHandCursor);
                             logic->map[i][j] = 0;
+                            remaindFlags++;
                         }
                         return true; // Event handled
                     }
                 }
             }
         }
+
     }
 
     return QObject::eventFilter(obj, event);
@@ -91,6 +100,8 @@ void GameBoard::resizeButtons()
     int width = parent->width() / gridLayout->columnCount();
     int height = parent->height() / gridLayout->rowCount();
     int side = qMin(width, height); // Ensure the buttons remain square
+    buttonSize = QSize(side,side);
+    parent->resize(width * gridLayout->columnCount(), height * gridLayout->rowCount());
 
     // Resize all buttons
     for (int i = 0; i < gridLayout->rowCount(); ++i) {
@@ -148,28 +159,34 @@ void GameBoard::updateMap()
 
 void GameBoard::showMins()
 {
-    int size;
-    if(logic->rowNum <= 8)
-        size = 30;
-    else if(logic->rowNum > 8 && logic->rowNum <= 16)
-        size = 20;
-    else if(logic->rowNum > 16 && logic->rowNum <= 24)
-        size = 15;
-    else
-        size = 10;
+    QIcon icon(":/icons/logo.ico");
+    QPixmap pixmap = icon.pixmap(buttonSize);
 
     for(int i = 0 ; i < logic->rowNum ; i++){
         for(int j = 0 ; j < logic->colNum; j++){
-            if(logic->mins[i][j] == true){
-                buttonsMap[i][j]->setIcon(QIcon(":/icons/logo.ico"));
-                buttonsMap[i][j]->setIconSize(QSize(size,size));
-            }
+            if(logic->mins[i][j] == true)
+                buttonsMap[i][j]->setIcon(QIcon(pixmap));
+
             buttonsMap[i][j]->setDisabled(1);
         }
     }
     buttonsMap[logic->minRow][logic->minCol]->setStyleSheet("background-color: darkred; border-radius: 0px;border :1px solid gray;");
 }
 
+void GameBoard::gamefinished()
+{
+    QIcon icon(":/icons/tada.png");
+    QPixmap pixmap = icon.pixmap(buttonSize);
+
+    for(int i = 0 ; i < logic->rowNum ; i++){
+        for(int j = 0 ; j < logic->colNum; j++){
+            if(logic->mins[i][j] == true)
+                buttonsMap[i][j]->setIcon(QIcon(pixmap));
+
+            else buttonsMap[i][j]->setDisabled(1);
+        }
+    }
+}
 
 
 

@@ -15,6 +15,7 @@ public:
 
     void buttonClicked(int row, int col);
     void checkNeighbors(int row, int col);
+    bool checkFlags();
 
 
     int rowNum;
@@ -28,8 +29,6 @@ public:
 signals:
     void finished();
     void userFailed();
-    void userWon();
-
 };
 
 #endif // GAMELOGIC_H

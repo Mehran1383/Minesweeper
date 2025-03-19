@@ -20,6 +20,7 @@ public:
     ~GameBoard() override;
 
     void resizeButtons();
+    void gamefinished();
 
 private slots:
     void updateMap();
@@ -38,6 +39,11 @@ private:
     GameLogic* logic;
     QTimer* timer;
     QWidget* parent;
+
+    QSize buttonSize;
+
+    int remaindFlags;
+    bool gameIsFinished;
 };
 
 #endif // GAMEBOARD_H

@@ -38,6 +38,9 @@ GameLogic::~GameLogic()
 
 void GameLogic::buttonClicked(int row, int col)
 {
+    if(map[row][col] == -2)
+        return;
+
     if(mins[row][col]){
         minRow = row;
         minCol = col;
@@ -52,7 +55,7 @@ void GameLogic::buttonClicked(int row, int col)
 
 void GameLogic::checkNeighbors(int row, int col)
 {
-    if(map[row][col] == 0 && mins[row][col] == 0){
+    if(map[row][col] == 0 && mins[row][col] == false){
 
         // Left-Up
         if((row > 0 && col > 0) && mins[row-1][col-1])
@@ -109,6 +112,16 @@ void GameLogic::checkNeighbors(int row, int col)
             checkNeighbors(row+1, col+1);
 
     }
+}
+
+bool GameLogic::checkFlags()
+{
+    for(int i = 0 ; i < rowNum ; i++)
+        for(int j = 0 ; j < colNum; j++)
+            if(map[i][j] == -2 && mins[i][j] == false)
+                return false;
+
+    return true;
 }
 
 
