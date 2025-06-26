@@ -19,9 +19,6 @@ public:
     GameBoard(QWidget* parent = nullptr, QGridLayout* gridLayout = nullptr, QTimer* timer = nullptr, int row = 8, int col = 8, int numOfMins = 10);
     ~GameBoard() override;
 
-    void resizeButtons();
-    void gamefinished();
-
 private slots:
     void updateMap();
     void startTimer();
@@ -34,6 +31,9 @@ protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
+    void resizeButtons();
+    void gamefinished();
+
     QGridLayout* gridLayout;
     SquareButton*** buttonsMap;
     GameLogic* logic;
@@ -43,7 +43,6 @@ private:
     QSize buttonSize;
 
     int remaindFlags;
-    bool gameIsFinished;
 };
 
 #endif // GAMEBOARD_H

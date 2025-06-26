@@ -42,6 +42,7 @@ MainWindow::~MainWindow()
         delete gameBoard;
 
     delete ui;
+    delete timer;
 }
 
 void MainWindow::on_mode1_clicked()
@@ -146,6 +147,7 @@ void MainWindow::animateTransition()
 
     // Start the animation
     animationGroup->start();
+
 }
 
 

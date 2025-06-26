@@ -4,6 +4,8 @@
 #include <QRandomGenerator>
 #include <QObject>
 
+#define FLAG_BUTTON -2
+#define EMPTY_BUTTON -1
 
 class GameLogic : public QObject
 {
@@ -14,9 +16,21 @@ public:
     ~GameLogic();
 
     void buttonClicked(int row, int col);
-    void checkNeighbors(int row, int col);
     bool checkFlags();
+    void setRowNum(int num) {rowNum = num;}
+    void setColNum(int num) {colNum = num;}
+    void setMapValue(int i , int j, int val) {map[i][j] = val;}
+    void setFinished() {gameIsFinished = true;}
+    int getRowNum() { return rowNum;}
+    int getColNum() { return colNum;}
+    int getMapValue(int i, int j) { return map[i][j];}
+    bool getMinsValue(int i, int j) { return mins[i][j];}
+    int getMinRow() { return minRow;}
+    int getMinCol() { return minCol;}
+    bool isFinished() { return gameIsFinished;}
 
+private:
+    void checkNeighbors(int row, int col);
 
     int rowNum;
     int colNum;
@@ -24,7 +38,7 @@ public:
     bool** mins;
     int minRow;
     int minCol;
-
+    bool gameIsFinished;
 
 signals:
     void finished();

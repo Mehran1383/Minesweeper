@@ -2,6 +2,7 @@
 #include <QtDebug>
 GameLogic::GameLogic(int Row, int Col, int numOfMins)
 {
+    this->gameIsFinished = false;
     int randomRow, randomCol;
 
     rowNum = Row;
@@ -38,7 +39,7 @@ GameLogic::~GameLogic()
 
 void GameLogic::buttonClicked(int row, int col)
 {
-    if(map[row][col] == -2)
+    if(map[row][col] == FLAG_BUTTON || gameIsFinished)
         return;
 
     if(mins[row][col]){
@@ -92,7 +93,7 @@ void GameLogic::checkNeighbors(int row, int col)
         if(map[row][col] > 0)
             return;
 
-        map[row][col] = -1;
+        map[row][col] = EMPTY_BUTTON;
 
         if(row > 0 && col > 0)
             checkNeighbors(row-1, col-1);
@@ -118,7 +119,7 @@ bool GameLogic::checkFlags()
 {
     for(int i = 0 ; i < rowNum ; i++)
         for(int j = 0 ; j < colNum; j++)
-            if(map[i][j] == -2 && mins[i][j] == false)
+            if(map[i][j] == FLAG_BUTTON && mins[i][j] == false)
                 return false;
 
     return true;

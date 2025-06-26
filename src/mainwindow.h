@@ -40,7 +40,6 @@ private:
     Ui::MainWindow *ui;
     GameBoard* gameBoard;
     QTimer* timer;
-
 };
 
 #endif // MAINWINDOW_H

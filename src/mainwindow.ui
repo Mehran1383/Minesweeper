@@ -192,6 +192,9 @@
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string>16 x 16 
  40 mines</string>
@@ -206,13 +209,6 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QGridLayout" name="buttonsLayout">
-          <item row="0" column="0" rowspan="6">
-           <layout class="QGridLayout" name="layout">
-            <item row="0" column="0">
-             <layout class="QGridLayout" name="mapLayout"/>
-            </item>
-           </layout>
-          </item>
           <item row="5" column="1">
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <property name="sizeConstraint">
@@ -323,6 +319,26 @@
                <string>Pause</string>
               </property>
              </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0" rowspan="6">
+           <layout class="QGridLayout" name="layout" rowminimumheight="0">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetDefaultConstraint</enum>
+            </property>
+            <property name="rightMargin">
+             <number>30</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="mapLayout" rowminimumheight="0" columnminimumwidth="0">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetDefaultConstraint</enum>
+              </property>
+              <property name="rightMargin">
+               <number>30</number>
+              </property>
+             </layout>
             </item>
            </layout>
           </item>
