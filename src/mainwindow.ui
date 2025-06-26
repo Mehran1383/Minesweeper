@@ -245,6 +245,33 @@
               </property>
              </widget>
             </item>
+            <item alignment="Qt::AlignVCenter">
+             <widget class="QLabel" name="label">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">image: url(:/icons/flag.png);
+padding-left: -50px;
+</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::WinPanel</enum>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::AutoText</enum>
+              </property>
+              <property name="scaledContents">
+               <bool>false</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
             <item>
              <spacer name="verticalSpacer">
               <property name="orientation">
@@ -259,7 +286,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="startOver_4">
+             <widget class="QPushButton" name="startOver">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>

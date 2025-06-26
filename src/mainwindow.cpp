@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -51,27 +53,35 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_mode1_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, timer, 8, 8, 10);
+    gameBoard = new GameBoard(this, ui->mapLayout, timer, mode1Dim, mode1Dim, mode1Mines);
     this->installEventFilter(gameBoard);
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
-
+    connect(gameBoard, &GameBoard::flagChanged,
+            this, &MainWindow::changeFlagCounter);
+    changeFlagCounter();
 }
 
 void MainWindow::on_mode2_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, timer, 16, 16, 40);
+    gameBoard = new GameBoard(this, ui->mapLayout, timer, mode2Dim, mode2Dim, mode2Mines);
     this->installEventFilter(gameBoard);
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
+    connect(gameBoard, &GameBoard::flagChanged,
+            this, &MainWindow::changeFlagCounter);
+    changeFlagCounter();
 }
 
 void MainWindow::on_mode3_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, timer, 24, 24, 99);
+    gameBoard = new GameBoard(this, ui->mapLayout, timer, mode3Dim, mode3Dim, mode3Mines);
     this->installEventFilter(gameBoard);
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
+    connect(gameBoard, &GameBoard::flagChanged,
+            this, &MainWindow::changeFlagCounter);
+    changeFlagCounter();
 }
 
 void MainWindow::on_changeDifficulty_clicked()
@@ -96,6 +106,30 @@ void MainWindow::on_pause_clicked()
     }
 }
 
+void MainWindow::on_startOver_clicked()
+{
+    int mode = gameBoard->getMode();
+    delete gameBoard;
+
+    switch (mode) {
+    case 1: gameBoard = new GameBoard(this, ui->mapLayout, timer, mode1Dim, mode1Dim, mode1Mines); break;
+    case 2: gameBoard = new GameBoard(this, ui->mapLayout, timer, mode2Dim, mode2Dim, mode2Mines); break;
+    case 3: gameBoard = new GameBoard(this, ui->mapLayout, timer, mode3Dim, mode3Dim, mode3Mines); break;
+    //case 4: gameBoard = new GameBoard(this, ui->mapLayout, timer, 24, 24, 99);
+    }
+
+    this->installEventFilter(gameBoard);
+    connect(gameBoard, &GameBoard::timerStarted,
+            this, &MainWindow::updatePauseButton);
+    connect(gameBoard, &GameBoard::flagChanged,
+            this, &MainWindow::changeFlagCounter);
+    changeFlagCounter();
+
+    timer->stop();
+    sec = min = 0;
+    showTime();
+}
+
 void MainWindow::updatePauseButton()
 {
     ui->pause->setText("Pause");
@@ -112,6 +146,22 @@ void MainWindow::showTime()
         sec = 0;
         min++;
     }
+}
+
+void MainWindow::changeFlagCounter()
+{
+    int total;
+    int remainded = gameBoard->getFlags();
+    int mode = gameBoard->getMode();
+
+    switch (mode) {
+    case 1: total = mode1Mines; break;
+    case 2: total = mode2Mines; break;
+    case 3: total = mode3Mines; break;
+    //case 4:
+    }
+
+    ui->label->setText(QString::fromStdString(std::to_string(remainded) + "/" + std::to_string(total)));
 }
 
 void MainWindow::animateTransition()
@@ -167,5 +217,7 @@ void MainWindow::animateTransition()
     animationGroup->start();
 
 }
+
+
 
 

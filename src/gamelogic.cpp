@@ -1,5 +1,5 @@
 #include "gamelogic.h"
-#include <QtDebug>
+
 GameLogic::GameLogic(int Row, int Col, int numOfMines)
 {
     this->gameIsFinished = false;

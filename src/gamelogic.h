@@ -7,6 +7,13 @@
 #define FLAG_BUTTON -2
 #define EMPTY_BUTTON -1
 
+#define mode1Dim 8
+#define mode1Mines 10
+#define mode2Dim 16
+#define mode2Mines 40
+#define mode3Dim 24
+#define mode3Mines 99
+
 class GameLogic : public QObject
 {
     Q_OBJECT

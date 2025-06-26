@@ -16,8 +16,11 @@ class GameBoard : public QWidget
     Q_OBJECT
 
 public:
-    GameBoard(QWidget* parent = nullptr, QGridLayout* gridLayout = nullptr, QTimer* timer = nullptr, int row = 8, int col = 8, int numOfMines = 10);
+    GameBoard(QWidget* parent = nullptr, QGridLayout* gridLayout = nullptr, QTimer* timer = nullptr, int row = mode1Dim, int col = mode1Dim, int numOfMines = mode1Mines);
     ~GameBoard() override;
+
+    int getMode() { return mode;}
+    int getFlags() { return remaindedFlags;}
 
 private slots:
     void updateMap();
@@ -26,6 +29,7 @@ private slots:
 
 signals:
     void timerStarted();
+    void flagChanged();
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
@@ -42,7 +46,8 @@ private:
 
     QSize buttonSize;
 
-    int remaindFlags;
+    int remaindedFlags;
+    int mode;
 };
 
 #endif // GAMEBOARD_H

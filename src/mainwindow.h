@@ -37,6 +37,12 @@ private slots:
 
     void updatePauseButton();
 
+    void on_startOver_clicked();
+
+    void changeFlagCounter();
+
+    void showTime();
+
 private:
     Ui::MainWindow *ui;
     GameBoard* gameBoard;
@@ -45,8 +51,6 @@ private:
 
     int sec;
     int min;
-
-    void showTime();
 };
 
 #endif // MAINWINDOW_H

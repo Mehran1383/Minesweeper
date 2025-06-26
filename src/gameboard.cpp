@@ -6,7 +6,14 @@ GameBoard::GameBoard(QWidget* parent, QGridLayout* layout, QTimer* timer, int ro
     this->gridLayout = layout;
     this->timer = timer;
     this->parent = parent;
-    this->remaindFlags = numOfMines;
+    this->remaindedFlags = numOfMines;
+
+    switch (row) {
+    case mode1Dim: mode = 1; break;
+    case mode2Dim: mode = 2; break;
+    case mode3Dim: mode = 3; break;
+    default: mode = 4;
+    }
 
     logic = new GameLogic(row, col, numOfMines);
     logic->setRowNum(row);
@@ -65,12 +72,13 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
                 for(int j = 0 ; j < logic->getColNum() ; j++){
                     if (buttonsMap[i][j] == obj) {
                         // Change the icon of the button
-                        if(logic->getMapValue(i, j) == 0 && remaindFlags > 0){
+                        if(logic->getMapValue(i, j) == 0 && remaindedFlags > 0){
                             buttonsMap[i][j]->setIcon(QIcon(":/icons/flag.png"));
                             buttonsMap[i][j]->setCursor(Qt::ArrowCursor);
                             logic->setMapValue(i, j, FLAG_BUTTON);
-                            remaindFlags--;
-                            if(remaindFlags == 0 && logic->checkFlags()){
+                            remaindedFlags--;
+                            emit flagChanged();
+                            if(remaindedFlags == 0 && logic->checkFlags()){
                                 gamefinished();
                                 logic->setFinished();
                                 timer->stop();
@@ -80,7 +88,8 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
                             buttonsMap[i][j]->setIcon(QIcon());
                             buttonsMap[i][j]->setCursor(Qt::PointingHandCursor);
                             logic->setMapValue(i, j, 0);
-                            remaindFlags++;
+                            remaindedFlags++;
+                            emit flagChanged();
                         }
                         return true; // Event handled
                     }
