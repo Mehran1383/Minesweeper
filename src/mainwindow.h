@@ -6,6 +6,7 @@
 #include <QParallelAnimationGroup>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QTime>
 
 #include "gameboard.h"
 
@@ -40,6 +41,12 @@ private:
     Ui::MainWindow *ui;
     GameBoard* gameBoard;
     QTimer* timer;
+    QTime time;
+
+    int sec;
+    int min;
+
+    void showTime();
 };
 
 #endif // MAINWINDOW_H

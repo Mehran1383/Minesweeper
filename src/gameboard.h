@@ -16,13 +16,13 @@ class GameBoard : public QWidget
     Q_OBJECT
 
 public:
-    GameBoard(QWidget* parent = nullptr, QGridLayout* gridLayout = nullptr, QTimer* timer = nullptr, int row = 8, int col = 8, int numOfMins = 10);
+    GameBoard(QWidget* parent = nullptr, QGridLayout* gridLayout = nullptr, QTimer* timer = nullptr, int row = 8, int col = 8, int numOfMines = 10);
     ~GameBoard() override;
 
 private slots:
     void updateMap();
     void startTimer();
-    void showMins();
+    void showMines();
 
 signals:
     void timerStarted();

@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <qdebug.h>
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -16,6 +14,10 @@ MainWindow::MainWindow(QWidget *parent)
     // Timer setup
     timer = new QTimer(this);
     timer->setInterval(1000);
+
+    // Set time
+    sec = min = 0;
+    showTime();
 
     this->gameBoard = nullptr;
 
@@ -34,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->changeDifficulty, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
 
+    connect(timer, &QTimer::timeout,
+            this, &MainWindow::showTime);
 }
 
 MainWindow::~MainWindow()
@@ -76,6 +80,8 @@ void MainWindow::on_changeDifficulty_clicked()
     gameBoard = nullptr;
 
     timer->stop();
+    sec = min = 0;
+    showTime();
     ui->pause->setText("Pause");
 }
 
@@ -95,6 +101,18 @@ void MainWindow::updatePauseButton()
     ui->pause->setText("Pause");
 }
 
+void MainWindow::showTime()
+{
+    time.setHMS(0,min,sec);
+    QString text = time.toString("mm:ss");
+    ui->lcdNumber->display(text);
+
+    sec++;
+    if(sec == 60){
+        sec = 0;
+        min++;
+    }
+}
 
 void MainWindow::animateTransition()
 {

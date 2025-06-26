@@ -12,7 +12,7 @@ class GameLogic : public QObject
     Q_OBJECT
 
 public:
-    GameLogic(int row, int col, int numOfMins);
+    GameLogic(int row, int col, int numOfMines);
     ~GameLogic();
 
     void buttonClicked(int row, int col);
@@ -24,9 +24,9 @@ public:
     int getRowNum() { return rowNum;}
     int getColNum() { return colNum;}
     int getMapValue(int i, int j) { return map[i][j];}
-    bool getMinsValue(int i, int j) { return mins[i][j];}
-    int getMinRow() { return minRow;}
-    int getMinCol() { return minCol;}
+    bool getMinesValue(int i, int j) { return mines[i][j];}
+    int getMineRow() { return mineRow;}
+    int getMineCol() { return mineCol;}
     bool isFinished() { return gameIsFinished;}
 
 private:
@@ -35,9 +35,9 @@ private:
     int rowNum;
     int colNum;
     int** map;
-    bool** mins;
-    int minRow;
-    int minCol;
+    bool** mines;
+    int mineRow;
+    int mineCol;
     bool gameIsFinished;
 
 signals:

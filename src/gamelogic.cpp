@@ -1,6 +1,6 @@
 #include "gamelogic.h"
 #include <QtDebug>
-GameLogic::GameLogic(int Row, int Col, int numOfMins)
+GameLogic::GameLogic(int Row, int Col, int numOfMines)
 {
     this->gameIsFinished = false;
     int randomRow, randomCol;
@@ -8,32 +8,32 @@ GameLogic::GameLogic(int Row, int Col, int numOfMins)
     rowNum = Row;
     colNum = Col;
 
-    mins = new bool*[rowNum];
+    mines = new bool*[rowNum];
     map = new int*[rowNum];
 
     for(int i = 0 ; i < rowNum ; i++)
         for(int j = 0 ; j < colNum; j++){
-            mins[i] = new bool[colNum];
+            mines[i] = new bool[colNum];
             map[i] = new int[colNum];
         }
     for(int i = 0 ; i < rowNum ; i++)
         for(int j = 0 ; j < colNum; j++){
-            mins[i][j] = false;
+            mines[i][j] = false;
             map[i][j] = 0;
         }
-    while(numOfMins >= 0){
+    while(numOfMines >= 0){
         randomRow = QRandomGenerator::global()->bounded(0, rowNum);
         randomCol = QRandomGenerator::global()->bounded(0, colNum);
-        if(mins[randomRow][randomCol] != true){
-            mins[randomRow][randomCol] = true;
-            numOfMins--;
+        if(mines[randomRow][randomCol] != true){
+            mines[randomRow][randomCol] = true;
+            numOfMines--;
         }
     }
 }
 
 GameLogic::~GameLogic()
 {
-    delete [] mins;
+    delete [] mines;
     delete [] map;
 }
 
@@ -42,9 +42,9 @@ void GameLogic::buttonClicked(int row, int col)
     if(map[row][col] == FLAG_BUTTON || gameIsFinished)
         return;
 
-    if(mins[row][col]){
-        minRow = row;
-        minCol = col;
+    if(mines[row][col]){
+        mineRow = row;
+        mineCol = col;
         emit userFailed();
         return;
     }
@@ -56,38 +56,38 @@ void GameLogic::buttonClicked(int row, int col)
 
 void GameLogic::checkNeighbors(int row, int col)
 {
-    if(map[row][col] == 0 && mins[row][col] == false){
+    if(map[row][col] == 0 && mines[row][col] == false){
 
         // Left-Up
-        if((row > 0 && col > 0) && mins[row-1][col-1])
+        if((row > 0 && col > 0) && mines[row-1][col-1])
             map[row][col]++;
 
         // Up
-        if(row > 0 && mins[row-1][col])
+        if(row > 0 && mines[row-1][col])
             map[row][col]++;
 
         // Right-Up
-        if((row > 0 && col+1 < colNum) && mins[row-1][col+1])
+        if((row > 0 && col+1 < colNum) && mines[row-1][col+1])
             map[row][col]++;
 
         // Left
-        if(col > 0 && mins[row][col-1])
+        if(col > 0 && mines[row][col-1])
             map[row][col]++;
 
         // Right
-        if(col+1 < colNum && mins[row][col+1])
+        if(col+1 < colNum && mines[row][col+1])
             map[row][col]++;
 
         // Left-Down
-        if((row+1 < rowNum && col > 0) && mins[row+1][col-1])
+        if((row+1 < rowNum && col > 0) && mines[row+1][col-1])
             map[row][col]++;
 
         // Down
-        if(row+1 < rowNum  && mins[row+1][col])
+        if(row+1 < rowNum  && mines[row+1][col])
             map[row][col]++;
 
         // Right-Down
-        if((row+1 < rowNum && col+1 < colNum) && mins[row+1][col+1])
+        if((row+1 < rowNum && col+1 < colNum) && mines[row+1][col+1])
             map[row][col]++;
 
         if(map[row][col] > 0)
@@ -119,7 +119,7 @@ bool GameLogic::checkFlags()
 {
     for(int i = 0 ; i < rowNum ; i++)
         for(int j = 0 ; j < colNum; j++)
-            if(map[i][j] == FLAG_BUTTON && mins[i][j] == false)
+            if(map[i][j] == FLAG_BUTTON && mines[i][j] == false)
                 return false;
 
     return true;

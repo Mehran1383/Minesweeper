@@ -957,6 +957,8 @@ QCalendarWidget:disabled {
 QLCDNumber {
   background-color: #19232D;
   color: #DFE1E2;
+  border: 1px solid #455364;
+  border-radius: 4px;
 }
 
 QLCDNumber:disabled {

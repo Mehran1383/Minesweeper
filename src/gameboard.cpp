@@ -1,14 +1,14 @@
 #include "gameboard.h"
 #include <QDebug>
 
-GameBoard::GameBoard(QWidget* parent, QGridLayout* layout, QTimer* timer, int row, int col, int numOfMins)
+GameBoard::GameBoard(QWidget* parent, QGridLayout* layout, QTimer* timer, int row, int col, int numOfMines)
 {
     this->gridLayout = layout;
     this->timer = timer;
     this->parent = parent;
-    this->remaindFlags = numOfMins;
+    this->remaindFlags = numOfMines;
 
-    logic = new GameLogic(row, col, numOfMins);
+    logic = new GameLogic(row, col, numOfMines);
     logic->setRowNum(row);
     logic->setColNum(col);
 
@@ -24,7 +24,8 @@ GameBoard::GameBoard(QWidget* parent, QGridLayout* layout, QTimer* timer, int ro
             gridLayout->addWidget(buttonsMap[i][j], i, j);
             connect(buttonsMap[i][j], &QPushButton::clicked, [this, i, j](){
                 this->logic->buttonClicked(i, j);
-                this->startTimer();
+                if(!logic->isFinished())
+                    this->startTimer();
             });
         }
     }
@@ -33,14 +34,11 @@ GameBoard::GameBoard(QWidget* parent, QGridLayout* layout, QTimer* timer, int ro
     gridLayout->setContentsMargins(0, 0, 0, 0);
     resizeButtons();
 
-    connect(logic, &GameLogic::userFailed, [this, timer](){
-        this->showMins();
-        timer->stop();
-    });
+    connect(logic, &GameLogic::userFailed,
+            this, &GameBoard::showMines);
 
     connect(logic, &GameLogic::finished,
             this, &GameBoard::updateMap);
-
 }
 
 GameBoard::~GameBoard()
@@ -75,6 +73,7 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
                             if(remaindFlags == 0 && logic->checkFlags()){
                                 gamefinished();
                                 logic->setFinished();
+                                timer->stop();
                             }
                         }
                         else if(logic->getMapValue(i, j) == FLAG_BUTTON){
@@ -156,21 +155,22 @@ void GameBoard::updateMap()
     }
 }
 
-void GameBoard::showMins()
+void GameBoard::showMines()
 {
     QIcon icon(":/icons/logo.ico");
     QPixmap pixmap = icon.pixmap(buttonSize);
 
     for(int i = 0 ; i < logic->getRowNum() ; i++){
         for(int j = 0 ; j < logic->getColNum(); j++){
-            if(logic->getMinsValue(i, j) == true && logic->getMapValue(i, j) != FLAG_BUTTON)
+            if(logic->getMinesValue(i, j) == true && logic->getMapValue(i, j) != FLAG_BUTTON)
                 buttonsMap[i][j]->setIcon(QIcon(pixmap));
             if(logic->getMapValue(i, j) != FLAG_BUTTON)
                 buttonsMap[i][j]->setDisabled(1);
         }
     }
-    buttonsMap[logic->getMinRow()][logic->getMinCol()]->setStyleSheet("background-color: darkred; border-radius: 0px; border :1px solid #19232D;");
+    buttonsMap[logic->getMineRow()][logic->getMineCol()]->setStyleSheet("background-color: darkred; border-radius: 0px; border :1px solid #19232D;");
     logic->setFinished();
+    timer->stop();
 }
 
 void GameBoard::gamefinished()
@@ -180,7 +180,7 @@ void GameBoard::gamefinished()
 
     for(int i = 0 ; i < logic->getRowNum() ; i++){
         for(int j = 0 ; j < logic->getColNum(); j++){
-            if(logic->getMinsValue(i, j) == true)
+            if(logic->getMinesValue(i, j) == true)
                 buttonsMap[i][j]->setIcon(QIcon(pixmap));
 
             else buttonsMap[i][j]->setDisabled(1);
