@@ -7,8 +7,10 @@
 #include <QStackedWidget>
 #include <QTimer>
 #include <QTime>
+#include <QDir>
 
 #include "gameboard.h"
+#include "database.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -46,7 +48,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     GameBoard* gameBoard;
-    QTimer* timer;
+    DatabaseManager* dbManager;
+    QTimer timer;
     QTime time;
 
     int sec;

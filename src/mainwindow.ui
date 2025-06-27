@@ -252,7 +252,7 @@
               </property>
               <property name="styleSheet">
                <string notr="true">image: url(:/icons/flag.png);
-padding-left: -50px;
+padding-left: -35px;
 </string>
               </property>
               <property name="frameShape">

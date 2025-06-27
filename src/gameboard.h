@@ -43,7 +43,6 @@ private:
     GameLogic* logic;
     QTimer* timer;
     QWidget* parent;
-
     QSize buttonSize;
 
     int remaindedFlags;

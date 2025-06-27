@@ -14,14 +14,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentIndex(0);
 
     // Timer setup
-    timer = new QTimer(this);
-    timer->setInterval(1000);
+    timer.setInterval(1000);
 
     // Set time
     sec = min = 0;
     showTime();
 
     this->gameBoard = nullptr;
+
+    // Database Setup
+    QString dbPath = QDir(QCoreApplication::applicationDirPath()).filePath("Minesweeper.db");
+    dbManager = new DatabaseManager(dbPath);
 
     connect(ui->mode1, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
@@ -38,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->changeDifficulty, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
 
-    connect(timer, &QTimer::timeout,
+    connect(&timer, &QTimer::timeout,
             this, &MainWindow::showTime);
 }
 
@@ -48,12 +51,11 @@ MainWindow::~MainWindow()
         delete gameBoard;
 
     delete ui;
-    delete timer;
 }
 
 void MainWindow::on_mode1_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, timer, mode1Dim, mode1Dim, mode1Mines);
+    gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode1Dim, mode1Dim, mode1Mines);
     this->installEventFilter(gameBoard);
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
@@ -64,7 +66,7 @@ void MainWindow::on_mode1_clicked()
 
 void MainWindow::on_mode2_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, timer, mode2Dim, mode2Dim, mode2Mines);
+    gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode2Dim, mode2Dim, mode2Mines);
     this->installEventFilter(gameBoard);
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
@@ -75,7 +77,7 @@ void MainWindow::on_mode2_clicked()
 
 void MainWindow::on_mode3_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, timer, mode3Dim, mode3Dim, mode3Mines);
+    gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode3Dim, mode3Dim, mode3Mines);
     this->installEventFilter(gameBoard);
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
@@ -89,7 +91,7 @@ void MainWindow::on_changeDifficulty_clicked()
     delete gameBoard;
     gameBoard = nullptr;
 
-    timer->stop();
+    timer.stop();
     sec = min = 0;
     showTime();
     ui->pause->setText("Pause");
@@ -97,11 +99,11 @@ void MainWindow::on_changeDifficulty_clicked()
 
 void MainWindow::on_pause_clicked()
 {
-    if(timer->isActive()){
-        timer->stop();
+    if(timer.isActive()){
+        timer.stop();
         ui->pause->setText("Resume");
     }else{
-        timer->start();
+        timer.start();
         ui->pause->setText("Pause");
     }
 }
@@ -112,9 +114,9 @@ void MainWindow::on_startOver_clicked()
     delete gameBoard;
 
     switch (mode) {
-    case 1: gameBoard = new GameBoard(this, ui->mapLayout, timer, mode1Dim, mode1Dim, mode1Mines); break;
-    case 2: gameBoard = new GameBoard(this, ui->mapLayout, timer, mode2Dim, mode2Dim, mode2Mines); break;
-    case 3: gameBoard = new GameBoard(this, ui->mapLayout, timer, mode3Dim, mode3Dim, mode3Mines); break;
+    case 1: gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode1Dim, mode1Dim, mode1Mines); break;
+    case 2: gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode2Dim, mode2Dim, mode2Mines); break;
+    case 3: gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode3Dim, mode3Dim, mode3Mines); break;
     //case 4: gameBoard = new GameBoard(this, ui->mapLayout, timer, 24, 24, 99);
     }
 
@@ -125,7 +127,7 @@ void MainWindow::on_startOver_clicked()
             this, &MainWindow::changeFlagCounter);
     changeFlagCounter();
 
-    timer->stop();
+    timer.stop();
     sec = min = 0;
     showTime();
 }
@@ -161,7 +163,7 @@ void MainWindow::changeFlagCounter()
     //case 4:
     }
 
-    ui->label->setText(QString::fromStdString(std::to_string(remainded) + "/" + std::to_string(total)));
+    ui->label->setText("      " + QString::fromStdString(std::to_string(remainded) + "/" + std::to_string(total)));
 }
 
 void MainWindow::animateTransition()

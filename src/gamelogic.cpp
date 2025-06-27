@@ -21,7 +21,7 @@ GameLogic::GameLogic(int Row, int Col, int numOfMines)
             mines[i][j] = false;
             map[i][j] = 0;
         }
-    while(numOfMines >= 0){
+    while(numOfMines > 0){
         randomRow = QRandomGenerator::global()->bounded(0, rowNum);
         randomCol = QRandomGenerator::global()->bounded(0, colNum);
         if(mines[randomRow][randomCol] != true){
