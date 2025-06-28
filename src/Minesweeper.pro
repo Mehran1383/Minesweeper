@@ -10,6 +10,7 @@ SOURCES += \
     database.cpp \
     gameboard.cpp \
     gamelogic.cpp \
+    highscores.cpp \
     main.cpp \
     mainwindow.cpp \
     squarebutton.cpp
@@ -18,10 +19,12 @@ HEADERS += \
     database.h \
     gameboard.h \
     gamelogic.h \
+    highscores.h \
     mainwindow.h \
     squarebutton.h
 
 FORMS += \
+    highscores.ui \
     mainwindow.ui
 
 DISTFILES +=

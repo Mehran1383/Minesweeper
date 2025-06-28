@@ -30,6 +30,7 @@ private slots:
 signals:
     void timerStarted();
     void flagChanged();
+    void userWon();
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;

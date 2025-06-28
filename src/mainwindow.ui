@@ -45,7 +45,7 @@
     <item row="0" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="mainPage">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -428,13 +428,15 @@ padding-left: -35px;
      <string>Settings</string>
     </property>
     <addaction name="actionScores"/>
+    <addaction name="separator"/>
     <addaction name="actionAppearance"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuSettings"/>
   </widget>
   <action name="actionScores">
    <property name="text">
-    <string>Scores</string>
+    <string>High Scores</string>
    </property>
    <property name="font">
     <font>
@@ -453,6 +455,16 @@ padding-left: -35px;
    </property>
    <property name="menuRole">
     <enum>QAction::AboutQtRole</enum>
+   </property>
+  </action>
+  <action name="actionNew_User">
+   <property name="text">
+    <string>Add New User</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Showcard Gothic</family>
+    </font>
    </property>
   </action>
  </widget>

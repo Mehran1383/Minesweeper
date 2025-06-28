@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QDebug>
+#include <QDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -43,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&timer, &QTimer::timeout,
             this, &MainWindow::showTime);
+
+    connect(ui->actionScores, &QAction::triggered,
+            this, &MainWindow::showStats);
+
 }
 
 MainWindow::~MainWindow()
@@ -53,37 +58,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_mode1_clicked()
+void MainWindow::init()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode1Dim, mode1Dim, mode1Mines);
     this->installEventFilter(gameBoard);
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
     connect(gameBoard, &GameBoard::flagChanged,
             this, &MainWindow::changeFlagCounter);
+    connect(gameBoard, &GameBoard::userWon,
+            this, &MainWindow::checkScore);
     changeFlagCounter();
+}
+
+void MainWindow::on_mode1_clicked()
+{
+    gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode1Dim, mode1Dim, mode1Mines);
+    init();
 }
 
 void MainWindow::on_mode2_clicked()
 {
     gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode2Dim, mode2Dim, mode2Mines);
-    this->installEventFilter(gameBoard);
-    connect(gameBoard, &GameBoard::timerStarted,
-            this, &MainWindow::updatePauseButton);
-    connect(gameBoard, &GameBoard::flagChanged,
-            this, &MainWindow::changeFlagCounter);
-    changeFlagCounter();
+    init();
 }
 
 void MainWindow::on_mode3_clicked()
 {
     gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode3Dim, mode3Dim, mode3Mines);
-    this->installEventFilter(gameBoard);
-    connect(gameBoard, &GameBoard::timerStarted,
-            this, &MainWindow::updatePauseButton);
-    connect(gameBoard, &GameBoard::flagChanged,
-            this, &MainWindow::changeFlagCounter);
-    changeFlagCounter();
+    init();
 }
 
 void MainWindow::on_changeDifficulty_clicked()
@@ -120,13 +122,7 @@ void MainWindow::on_startOver_clicked()
     //case 4: gameBoard = new GameBoard(this, ui->mapLayout, timer, 24, 24, 99);
     }
 
-    this->installEventFilter(gameBoard);
-    connect(gameBoard, &GameBoard::timerStarted,
-            this, &MainWindow::updatePauseButton);
-    connect(gameBoard, &GameBoard::flagChanged,
-            this, &MainWindow::changeFlagCounter);
-    changeFlagCounter();
-
+    init();
     timer.stop();
     sec = min = 0;
     showTime();
@@ -135,6 +131,16 @@ void MainWindow::on_startOver_clicked()
 void MainWindow::updatePauseButton()
 {
     ui->pause->setText("Pause");
+}
+
+void MainWindow::showStats()
+{
+
+}
+
+bool MainWindow::checkScore()
+{
+
 }
 
 void MainWindow::showTime()

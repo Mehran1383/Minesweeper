@@ -82,6 +82,7 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
                                 gamefinished();
                                 logic->setFinished();
                                 timer->stop();
+                                emit userWon();
                             }
                         }
                         else if(logic->getMapValue(i, j) == FLAG_BUTTON){
@@ -166,13 +167,18 @@ void GameBoard::updateMap()
 
 void GameBoard::showMines()
 {
-    QIcon icon(":/icons/logo.ico");
-    QPixmap pixmap = icon.pixmap(buttonSize);
+    QIcon mineIcon(":/icons/logo.ico");
+    QPixmap minePixmap = mineIcon.pixmap(buttonSize);
+
+    QIcon wrongIcon(":/icons/wrong.png");
+    QPixmap wrongPixmap = wrongIcon.pixmap(buttonSize);
 
     for(int i = 0 ; i < logic->getRowNum() ; i++){
         for(int j = 0 ; j < logic->getColNum(); j++){
             if(logic->getMinesValue(i, j) == true && logic->getMapValue(i, j) != FLAG_BUTTON)
-                buttonsMap[i][j]->setIcon(QIcon(pixmap));
+                buttonsMap[i][j]->setIcon(QIcon(minePixmap));
+            else if(logic->getMinesValue(i, j) == false && logic->getMapValue(i, j) == FLAG_BUTTON)
+                buttonsMap[i][j]->setIcon(QIcon(wrongPixmap));
             if(logic->getMapValue(i, j) != FLAG_BUTTON)
                 buttonsMap[i][j]->setDisabled(1);
         }

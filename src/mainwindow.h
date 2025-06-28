@@ -45,6 +45,10 @@ private slots:
 
     void showTime();
 
+    void showStats();
+
+    bool checkScore();
+
 private:
     Ui::MainWindow *ui;
     GameBoard* gameBoard;
@@ -54,6 +58,8 @@ private:
 
     int sec;
     int min;
+
+    void init();
 };
 
 #endif // MAINWINDOW_H
