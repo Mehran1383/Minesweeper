@@ -11,6 +11,7 @@
 
 #include "gameboard.h"
 #include "database.h"
+#include "custommode.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,6 +32,8 @@ private slots:
 
     void on_mode3_clicked();
 
+    void on_customMode_clicked();
+
     void on_changeDifficulty_clicked();
 
     void animateTransition();
@@ -49,10 +52,14 @@ private slots:
 
     bool checkScore();
 
+    void createCustomGame();
+
 private:
     Ui::MainWindow *ui;
     GameBoard* gameBoard;
     DatabaseManager* dbManager;
+    CustomMode customMode;
+    QGridLayout* mapLayout;
     QTimer timer;
     QTime time;
 

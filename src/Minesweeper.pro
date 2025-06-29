@@ -7,6 +7,7 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
+    custommode.cpp \
     database.cpp \
     gameboard.cpp \
     gamelogic.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
     squarebutton.cpp
 
 HEADERS += \
+    custommode.h \
     database.h \
     gameboard.h \
     gamelogic.h \
@@ -24,6 +26,7 @@ HEADERS += \
     squarebutton.h
 
 FORMS += \
+    custommode.ui \
     highscores.ui \
     mainwindow.ui
 

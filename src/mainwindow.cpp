@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     showTime();
 
     this->gameBoard = nullptr;
+    this->mapLayout = nullptr;
 
     // Database Setup
     QString dbPath = QDir(QCoreApplication::applicationDirPath()).filePath("Minesweeper.db");
@@ -36,9 +37,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mode3, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
 
-    connect(ui->customMode, &QPushButton::clicked,
-            this, &MainWindow::animateTransition);
-
     connect(ui->changeDifficulty, &QPushButton::clicked,
             this, &MainWindow::animateTransition);
 
@@ -48,12 +46,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionScores, &QAction::triggered,
             this, &MainWindow::showStats);
 
+    connect(&customMode, &CustomMode::accepted,[this](){
+       this->createCustomGame();
+       this->animateTransition();
+    });
 }
 
 MainWindow::~MainWindow()
 {
     if(gameBoard != nullptr)
         delete gameBoard;
+
+    if(mapLayout != nullptr)
+        delete mapLayout;
 
     delete ui;
 }
@@ -72,31 +77,58 @@ void MainWindow::init()
 
 void MainWindow::on_mode1_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode1Dim, mode1Dim, mode1Mines);
+    mapLayout = new QGridLayout;
+    ui->layout->addLayout(mapLayout, 0, 0);
+    gameBoard = new GameBoard(this, mapLayout, &timer, mode1Dim, mode1Dim, mode1Mines);
     init();
+    this->setMinimumSize(520, 340);
 }
 
 void MainWindow::on_mode2_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode2Dim, mode2Dim, mode2Mines);
+    mapLayout = new QGridLayout;
+    ui->layout->addLayout(mapLayout, 0, 0);
+    gameBoard = new GameBoard(this, mapLayout, &timer, mode2Dim, mode2Dim, mode2Mines);
     init();
+    this->setMinimumSize(550, 370);
 }
 
 void MainWindow::on_mode3_clicked()
 {
-    gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode3Dim, mode3Dim, mode3Mines);
+    mapLayout = new QGridLayout;
+    ui->layout->addLayout(mapLayout, 0, 0);
+    gameBoard = new GameBoard(this, mapLayout, &timer, mode3Dim, mode3Dim, mode3Mines);
     init();
+    this->setMinimumSize(640, 460);
+}
+
+
+void MainWindow::on_customMode_clicked()
+{
+    customMode.show();
+}
+
+void MainWindow::createCustomGame()
+{
+    mapLayout = new QGridLayout;
+    ui->layout->addLayout(mapLayout, 0, 0);
+    gameBoard = new GameBoard(this, mapLayout, &timer, customMode.getRow(), customMode.getCol(), customMode.getMine());
+    init();
+    this->setMinimumSize(640, 460);
 }
 
 void MainWindow::on_changeDifficulty_clicked()
 {
     delete gameBoard;
+    delete mapLayout;
     gameBoard = nullptr;
+    mapLayout = nullptr;
 
     timer.stop();
     sec = min = 0;
     showTime();
     ui->pause->setText("Pause");
+    this->setMinimumSize(400, 300);
 }
 
 void MainWindow::on_pause_clicked()
@@ -113,16 +145,19 @@ void MainWindow::on_pause_clicked()
 void MainWindow::on_startOver_clicked()
 {
     int mode = gameBoard->getMode();
+
     delete gameBoard;
+    delete mapLayout;
+    gameBoard = nullptr;
+    mapLayout = nullptr;
 
     switch (mode) {
-    case 1: gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode1Dim, mode1Dim, mode1Mines); break;
-    case 2: gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode2Dim, mode2Dim, mode2Mines); break;
-    case 3: gameBoard = new GameBoard(this, ui->mapLayout, &timer, mode3Dim, mode3Dim, mode3Mines); break;
-    //case 4: gameBoard = new GameBoard(this, ui->mapLayout, timer, 24, 24, 99);
+    case 1: on_mode1_clicked(); break;
+    case 2: on_mode2_clicked(); break;
+    case 3: on_mode3_clicked(); break;
+    case 4: createCustomGame();
     }
 
-    init();
     timer.stop();
     sec = min = 0;
     showTime();
@@ -166,7 +201,7 @@ void MainWindow::changeFlagCounter()
     case 1: total = mode1Mines; break;
     case 2: total = mode2Mines; break;
     case 3: total = mode3Mines; break;
-    //case 4:
+    case 4: total = customMode.getMine();
     }
 
     ui->label->setText("      " + QString::fromStdString(std::to_string(remainded) + "/" + std::to_string(total)));
@@ -183,11 +218,9 @@ void MainWindow::animateTransition()
     int width = ui->stackedWidget->width();
     int height = ui->stackedWidget->height();
 
-    // Ensure the next widget is positioned to the right of the stacked widget
     nextWidget->setGeometry(width, 0, width, height);
-    nextWidget->show(); // Make sure the next widget is visible
+    nextWidget->show();
 
-    // Animate the current widget to the left
     QPropertyAnimation *animationCurrent = new QPropertyAnimation(currentWidget, "geometry");
     animationCurrent->setDuration(500);
     animationCurrent->setStartValue(QRect(0, 0, width, height));
@@ -198,32 +231,25 @@ void MainWindow::animateTransition()
         animationCurrent->setEndValue(QRect(width, 0, width, height));
     }
 
-    // Animate the next widget from the right
     QPropertyAnimation *animationNext = new QPropertyAnimation(nextWidget, "geometry");
     animationNext->setDuration(500);
     animationNext->setStartValue(QRect(width, 0, width, height));
     animationNext->setEndValue(QRect(0, 0, width, height));
 
-
-    // Use a parallel animation group to run both animations simultaneously
     QParallelAnimationGroup *animationGroup = new QParallelAnimationGroup;
     animationGroup->addAnimation(animationCurrent);
     animationGroup->addAnimation(animationNext);
 
-    // Set the animation group as the parent of the animations
     animationCurrent->setParent(animationGroup);
     animationNext->setParent(animationGroup);
 
-    // Set the current index of the stacked widget to the new index after the animation finishes
     QStackedWidget* stack = ui->stackedWidget;
     QObject::connect(animationGroup, &QParallelAnimationGroup::finished, [stack, newIndex, animationGroup]() {
         stack->setCurrentIndex(newIndex);
         animationGroup->deleteLater();
     });
 
-    // Start the animation
     animationGroup->start();
-
 }
 
 

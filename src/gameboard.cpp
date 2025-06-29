@@ -63,15 +63,12 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
         resizeButtons();
     }
 
-    // Check for right-click on the button
     if (obj->inherits("QPushButton") && event->type() == QEvent::MouseButtonPress && !logic->isFinished()) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         if (mouseEvent->button() == Qt::RightButton) {
-            // Find the button that was right-clicked
             for(int i = 0 ; i < logic->getRowNum() ; i++){
                 for(int j = 0 ; j < logic->getColNum() ; j++){
                     if (buttonsMap[i][j] == obj) {
-                        // Change the icon of the button
                         if(logic->getMapValue(i, j) == 0 && remaindedFlags > 0){
                             buttonsMap[i][j]->setIcon(QIcon(":/icons/flag.png"));
                             buttonsMap[i][j]->setCursor(Qt::ArrowCursor);
@@ -92,7 +89,7 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
                             remaindedFlags++;
                             emit flagChanged();
                         }
-                        return true; // Event handled
+                        return true;
                     }
                 }
             }
@@ -104,14 +101,11 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
 
 void GameBoard::resizeButtons()
 {
-    // Calculate the size of each button
     int width = parent->width() / gridLayout->columnCount();
     int height = parent->height() / gridLayout->rowCount();
-    int side = qMin(width, height); // Ensure the buttons remain square
+    int side = qMin(width, height);
     buttonSize = QSize(side,side);
-    parent->resize(width * gridLayout->columnCount(), height * gridLayout->rowCount());
 
-    // Resize all buttons
     for (int i = 0; i < gridLayout->rowCount(); ++i) {
         for (int j = 0; j < gridLayout->columnCount(); ++j) {
             QLayoutItem* item = gridLayout->itemAtPosition(i, j);
