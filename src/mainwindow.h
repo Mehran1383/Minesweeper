@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QDir>
+#include <QInputDialog>
 
 #include "gameboard.h"
 #include "database.h"
@@ -48,9 +49,9 @@ private slots:
 
     void showTime();
 
-    void showStats();
+    void showTables();
 
-    bool checkScore();
+    void addToTable();
 
     void createCustomGame();
 

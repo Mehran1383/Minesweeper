@@ -23,9 +23,9 @@ public:
 private slots:
     void on_buttonBox_accepted();
 
-    void on_rowSpinBox_valueChanged(int arg1);
+    void on_rowSpinBox_valueChanged(int value);
 
-    void on_colSpinBox_valueChanged(int arg1);
+    void on_colSpinBox_valueChanged(int value);
 
 signals:
     void accepted();

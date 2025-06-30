@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->gameBoard = nullptr;
     this->mapLayout = nullptr;
 
-    // Database Setup
+    // Database setup
     QString dbPath = QDir(QCoreApplication::applicationDirPath()).filePath("Minesweeper.db");
     dbManager = new DatabaseManager(dbPath);
 
@@ -44,11 +44,11 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::showTime);
 
     connect(ui->actionScores, &QAction::triggered,
-            this, &MainWindow::showStats);
+            this, &MainWindow::showTables);
 
     connect(&customMode, &CustomMode::accepted,[this](){
-       this->createCustomGame();
-       this->animateTransition();
+        this->createCustomGame();
+        this->animateTransition();
     });
 }
 
@@ -71,7 +71,7 @@ void MainWindow::init()
     connect(gameBoard, &GameBoard::flagChanged,
             this, &MainWindow::changeFlagCounter);
     connect(gameBoard, &GameBoard::userWon,
-            this, &MainWindow::checkScore);
+            this, &MainWindow::addToTable);
     changeFlagCounter();
 }
 
@@ -168,14 +168,18 @@ void MainWindow::updatePauseButton()
     ui->pause->setText("Pause");
 }
 
-void MainWindow::showStats()
+void MainWindow::showTables()
 {
 
 }
 
-bool MainWindow::checkScore()
+void MainWindow::addToTable()
 {
+    auto name = QInputDialog::getText(this, tr("Congratulations!"), tr("You've earned a good score!<br>Please enter your name:"));
+    int score = min * 60 + sec;
 
+    if(dbManager->updateUser(name, gameBoard->getMode(), score) == USER_NOT_FOUND)
+        dbManager->addUser(name, gameBoard->getMode(), score);
 }
 
 void MainWindow::showTime()
