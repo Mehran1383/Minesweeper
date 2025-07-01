@@ -1,6 +1,9 @@
 #include "database.h"
 #include <QtDebug>
 #include <QSqlError>
+#include <QHeaderView>
+
+#include "string"
 
 DatabaseManager::DatabaseManager(const QString& databaseName)
 {
@@ -41,9 +44,9 @@ bool DatabaseManager::createTable()
             "mode1_best_score INTEGER,"
             "mode2_best_score INTEGER,"
             "mode3_best_score INTEGER,"
-            "mode1_date_time TIMESTAMP,"
-            "mode2_date_time TIMESTAMP,"
-            "mode3_date_time TIMESTAMP);";
+            "mode1_date_time TEXT,"
+            "mode2_date_time TEXT,"
+            "mode3_date_time TEXT);";
 
     if(!query.exec(table)){
         qCritical() << "Failed to create table: " << query.lastError().text();
@@ -73,7 +76,7 @@ bool DatabaseManager::addUser(const QString &name, int mode, int score)
         query.bindValue(":date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
     }
 
-    if (!query.exec()) {
+    if(!query.exec()) {
         qWarning() << "Failed to add user:" << query.lastError().text();
         QMessageBox::critical(this, "Save Highe Scores", "Failed to add your score!");
         return false;
@@ -92,9 +95,9 @@ int DatabaseManager::updateUser(const QString &name, int mode, int score)
     }
     query.bindValue(":username", name);
 
-    if (query.exec())
+    if(query.exec())
     {
-        if (query.next())
+        if(query.next())
         {
             if(score < query.value(1).toInt() || query.isNull(1)){
                 switch (mode) {
@@ -128,5 +131,31 @@ int DatabaseManager::updateUser(const QString &name, int mode, int score)
     QMessageBox::critical(this, "Save Highe Scores", "Failed to add your score!");
     return ERROR;
 }
+
+void DatabaseManager::populateTable(QTableView *view, int mode)
+{
+    QString selectQuery;
+    QSqlQueryModel* model;
+
+    switch (mode) {
+    case 1: model = &model1; break;
+    case 2: model = &model2; break;
+    case 3: model = &model3;
+    }
+
+    selectQuery = QString("SELECT ROWID, name, printf('%s:%s', mode%1_best_score / 60, mode%1_best_score % 60), mode%1_date_time "
+                          "FROM users "
+                          "WHERE mode%1_best_score IS NOT NULL "
+                          "ORDER BY mode%1_best_score").arg(mode);
+
+    model->setQuery(selectQuery);
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Rank"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Name"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Best Time"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Date & Time"));
+
+    view->setModel(model);
+}
+
 
 

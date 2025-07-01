@@ -29,9 +29,9 @@ GameBoard::GameBoard(QWidget* parent, QGridLayout* layout, QTimer* timer, int ro
             buttonsMap[i][j] = new SquareButton;
             buttonsMap[i][j]->installEventFilter(this);
             gridLayout->addWidget(buttonsMap[i][j], i, j);
-            connect(buttonsMap[i][j], &QPushButton::clicked, [this, i, j](){
+            connect(buttonsMap[i][j], &QPushButton::clicked, [this, i, j, timer](){
                 this->logic->buttonClicked(i, j);
-                if(!logic->isFinished())
+                if(!logic->isFinished() && !timer->isActive())
                     this->startTimer();
             });
         }
@@ -80,6 +80,7 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
                                 logic->setFinished();
                                 timer->stop();
                                 emit userWon();
+                                emit gameOver();
                             }
                         }
                         else if(logic->getMapValue(i, j) == FLAG_BUTTON){
@@ -89,6 +90,9 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
                             remaindedFlags++;
                             emit flagChanged();
                         }
+                        if(!logic->isFinished() && !timer->isActive())
+                            this->startTimer();
+
                         return true;
                     }
                 }
@@ -180,6 +184,7 @@ void GameBoard::showMines()
     buttonsMap[logic->getMineRow()][logic->getMineCol()]->setStyleSheet("background-color: darkred; border-radius: 0px; border :1px solid #19232D;");
     logic->setFinished();
     timer->stop();
+    emit gameOver();
 }
 
 void GameBoard::gamefinished()

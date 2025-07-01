@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(tr("Minesweeper"));
     setWindowIcon(QIcon(":/icons/logo.ico"));
     ui->stackedWidget->setCurrentIndex(0);
+    ui->pause->setDisabled(1);
 
     // Timer setup
     timer.setInterval(1000);
@@ -23,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->gameBoard = nullptr;
     this->mapLayout = nullptr;
+    this->view1 = highScoresTables.table(1);
+    this->view2 = highScoresTables.table(2);
+    this->view3 = highScoresTables.table(3);
 
     // Database setup
     QString dbPath = QDir(QCoreApplication::applicationDirPath()).filePath("Minesweeper.db");
@@ -68,10 +72,15 @@ void MainWindow::init()
     this->installEventFilter(gameBoard);
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
-    connect(gameBoard, &GameBoard::flagChanged,
-            this, &MainWindow::changeFlagCounter);
+    connect(gameBoard, &GameBoard::flagChanged, [this](){
+       this->changeFlagCounter();
+        ui->pause->setDisabled(0);
+    });
     connect(gameBoard, &GameBoard::userWon,
-            this, &MainWindow::addToTable);
+            this, &MainWindow::updatetTable);
+    connect(gameBoard, &GameBoard::gameOver, [this](){
+        ui->pause->setDisabled(1);
+    });
     changeFlagCounter();
 }
 
@@ -161,22 +170,32 @@ void MainWindow::on_startOver_clicked()
     timer.stop();
     sec = min = 0;
     showTime();
+
+    ui->pause->setText("Pause");
+    ui->pause->setDisabled(1);
 }
 
 void MainWindow::updatePauseButton()
 {
+    ui->pause->setDisabled(0);
     ui->pause->setText("Pause");
 }
 
 void MainWindow::showTables()
 {
-
+    dbManager->populateTable(view1, 1);
+    dbManager->populateTable(view2, 2);
+    dbManager->populateTable(view3, 3);
+    highScoresTables.show();
 }
 
-void MainWindow::addToTable()
+void MainWindow::updatetTable()
 {
+    if(gameBoard->getMode() == 4)
+        return;
+
     auto name = QInputDialog::getText(this, tr("Congratulations!"), tr("You've earned a good score!<br>Please enter your name:"));
-    int score = min * 60 + sec;
+    int score = min * 60 + sec - 1;
 
     if(dbManager->updateUser(name, gameBoard->getMode(), score) == USER_NOT_FOUND)
         dbManager->addUser(name, gameBoard->getMode(), score);

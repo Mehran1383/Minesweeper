@@ -13,6 +13,7 @@
 #include "gameboard.h"
 #include "database.h"
 #include "custommode.h"
+#include "highscores.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -51,7 +52,7 @@ private slots:
 
     void showTables();
 
-    void addToTable();
+    void updatetTable();
 
     void createCustomGame();
 
@@ -60,7 +61,11 @@ private:
     GameBoard* gameBoard;
     DatabaseManager* dbManager;
     CustomMode customMode;
+    HighScores highScoresTables;
     QGridLayout* mapLayout;
+    QTableView* view1;
+    QTableView* view2;
+    QTableView* view3;
     QTimer timer;
     QTime time;
 

@@ -4,8 +4,10 @@
 #include <QSqlDatabase>
 #include <QFile>
 #include <QSqlQuery>
+#include <QSqlQueryModel>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QTableView>
 
 #define USER_FOUND 1
 #define USER_NOT_FOUND 0
@@ -17,12 +19,17 @@ public:
     DatabaseManager(const QString& databaseName);
     ~DatabaseManager();
 
-    bool createTable();
     bool addUser(const QString &name, int mode, int score);
     int updateUser(const QString &name, int mode, int score);
+    void populateTable(QTableView* view, int mode);
 
 private:
     QSqlDatabase db;
+    QSqlQueryModel model1;
+    QSqlQueryModel model2;
+    QSqlQueryModel model3;
+
+    bool createTable();
 };
 
 #endif // DATABASE_H

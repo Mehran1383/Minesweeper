@@ -9,7 +9,8 @@ CustomMode::CustomMode(QWidget *parent) :
 
     setWindowFlag(Qt::WindowStaysOnTopHint);
     setWindowTitle(tr("Minesweeper"));
-    setWindowIcon(QIcon(":/icons/logo.ico"));}
+    setWindowIcon(QIcon(":/icons/logo.ico"));
+}
 
 CustomMode::~CustomMode()
 {

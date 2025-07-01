@@ -31,6 +31,7 @@ signals:
     void timerStarted();
     void flagChanged();
     void userWon();
+    void gameOver();
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
