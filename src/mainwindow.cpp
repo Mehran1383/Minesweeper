@@ -93,6 +93,7 @@ void MainWindow::on_mode1_clicked()
     this->setMinimumSize(520, 340);
 }
 
+
 void MainWindow::on_mode2_clicked()
 {
     mapLayout = new QGridLayout;
@@ -110,7 +111,6 @@ void MainWindow::on_mode3_clicked()
     init();
     this->setMinimumSize(640, 460);
 }
-
 
 void MainWindow::on_customMode_clicked()
 {
