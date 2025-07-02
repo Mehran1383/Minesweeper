@@ -73,7 +73,7 @@ void MainWindow::init()
     connect(gameBoard, &GameBoard::timerStarted,
             this, &MainWindow::updatePauseButton);
     connect(gameBoard, &GameBoard::flagChanged, [this](){
-       this->changeFlagCounter();
+        this->changeFlagCounter();
         ui->pause->setDisabled(0);
     });
     connect(gameBoard, &GameBoard::userWon,
@@ -191,14 +191,24 @@ void MainWindow::showTables()
 
 void MainWindow::updatetTable()
 {
-    if(gameBoard->getMode() == 4)
+    int mode = gameBoard->getMode();
+
+    if(mode == 4)
         return;
 
-    auto name = QInputDialog::getText(this, tr("Congratulations!"), tr("You've earned a good score!<br>Please enter your name:"));
     int score = min * 60 + sec - 1;
 
-    if(dbManager->updateUser(name, gameBoard->getMode(), score) == USER_NOT_FOUND)
-        dbManager->addUser(name, gameBoard->getMode(), score);
+    if(dbManager->count(mode) >= MAX_RANK){
+        if(score <= dbManager->maxScore(mode))
+            dbManager->deleteUserRecord(mode);
+        else
+            return;
+    }
+
+    auto name = QInputDialog::getText(this, tr("Congratulations!"), tr("You've earned a good score!<br>Please enter your name:"));
+
+    if(dbManager->updateUser(name, mode, score) == USER_NOT_FOUND)
+        dbManager->addUser(name, mode, score);
 }
 
 void MainWindow::showTime()

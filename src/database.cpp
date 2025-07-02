@@ -1,9 +1,7 @@
 #include "database.h"
 #include <QtDebug>
 #include <QSqlError>
-#include <QHeaderView>
 
-#include "string"
 
 DatabaseManager::DatabaseManager(const QString& databaseName)
 {
@@ -59,22 +57,10 @@ bool DatabaseManager::addUser(const QString &name, int mode, int score)
 {
     QSqlQuery query;
 
-    switch (mode) {
-    case 1: query.prepare("INSERT INTO users (name, mode1_best_score, mode1_date_time) VALUES (:username, :best_score, :date_time)");
-        query.bindValue(":username", name);
-        query.bindValue(":best_score", score);
-        query.bindValue(":date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
-        break;
-    case 2:query.prepare("INSERT INTO users (name, mode2_best_score, mode2_date_time) VALUES (:username, :best_score, :date_time)");
-        query.bindValue(":username", name);
-        query.bindValue(":best_score", score);
-        query.bindValue(":date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
-        break;
-    case 3: query.prepare("INSERT INTO users (name, mode3_best_score, mode3_date_time) VALUES (:username, :best_score, :date_time)");
-        query.bindValue(":username", name);
-        query.bindValue(":best_score", score);
-        query.bindValue(":date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
-    }
+    query.prepare(QString("INSERT INTO users (name, mode%1_best_score, mode%1_date_time) VALUES (:username, :best_score, :date_time)").arg(mode));
+    query.bindValue(":username", name);
+    query.bindValue(":best_score", score);
+    query.bindValue(":date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     if(!query.exec()) {
         qWarning() << "Failed to add user:" << query.lastError().text();
@@ -88,34 +74,17 @@ int DatabaseManager::updateUser(const QString &name, int mode, int score)
 {
     QSqlQuery query;
 
-    switch (mode) {
-    case 1: query.prepare("SELECT name, mode1_best_score FROM users WHERE name = :username"); break;
-    case 2: query.prepare("SELECT name, mode2_best_score FROM users WHERE name = :username"); break;
-    case 3: query.prepare("SELECT name, mode3_best_score FROM users WHERE name = :username");
-    }
+    query.prepare(QString("SELECT name, mode%1_best_score FROM users WHERE name = :username").arg(mode));
     query.bindValue(":username", name);
 
-    if(query.exec())
-    {
-        if(query.next())
-        {
+    if(query.exec()){
+        if(query.next()){
             if(score < query.value(1).toInt() || query.isNull(1)){
-                switch (mode) {
-                case 1: query.prepare("UPDATE users SET mode1_best_score = :new_best_score, mode1_date_time = :new_date_time WHERE name = :username");
-                    query.bindValue(":new_best_score", score);
-                    query.bindValue(":new_date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
-                    query.bindValue(":username", name);
-                    break;
-                case 2: query.prepare("UPDATE users SET mode2_best_score = :new_best_score, mode2_date_time = :new_date_time WHERE name = :username");
-                    query.bindValue(":new_best_score", score);
-                    query.bindValue(":new_date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
-                    query.bindValue(":username", name);
-                    break;
-                case 3: query.prepare("UPDATE users SET mode3_best_score = :new_best_score, mode3_date_time = :new_date_time WHERE name = :username");
-                    query.bindValue(":new_best_score", score);
-                    query.bindValue(":new_date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
-                    query.bindValue(":username", name);
-                }
+                query.prepare(QString("UPDATE users SET mode%1_best_score = :new_best_score, mode%1_date_time = :new_date_time WHERE name = :username").arg(mode));
+                query.bindValue(":new_best_score", score);
+                query.bindValue(":new_date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
+                query.bindValue(":username", name);
+
                 if(!query.exec()){
                     qWarning() << "Failed to check user:" << query.lastError().text();
                     QMessageBox::critical(this, "Save Highe Scores", "Failed to add your score!");
@@ -143,10 +112,9 @@ void DatabaseManager::populateTable(QTableView *view, int mode)
     case 3: model = &model3;
     }
 
-    selectQuery = QString("SELECT ROWID, name, printf('%s:%s', mode%1_best_score / 60, mode%1_best_score % 60), mode%1_date_time "
+    selectQuery = QString("SELECT ROW_NUMBER() OVER (ORDER BY mode%1_best_score), name, printf('%s:%s', mode%1_best_score / 60, mode%1_best_score % 60), mode%1_date_time "
                           "FROM users "
-                          "WHERE mode%1_best_score IS NOT NULL "
-                          "ORDER BY mode%1_best_score").arg(mode);
+                          "WHERE mode%1_best_score IS NOT NULL").arg(mode);
 
     model->setQuery(selectQuery);
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("Rank"));
@@ -155,6 +123,41 @@ void DatabaseManager::populateTable(QTableView *view, int mode)
     model->setHeaderData(3, Qt::Horizontal, QObject::tr("Date & Time"));
 
     view->setModel(model);
+}
+
+int DatabaseManager::maxScore(int mode)
+{
+    QSqlQuery query;
+
+    if(query.exec(QString("SELECT MAX(mode%1_best_score) FROM users").arg(mode))){
+        if(query.next()){
+            return query.value(0).toInt();
+        }
+    }
+
+    return ERROR;
+}
+
+int DatabaseManager::count(int mode)
+{
+    QSqlQuery query;
+
+    if(query.exec(QString("SELECT COUNT(*) FROM users WHERE mode%1_best_score IS NOT NULL").arg(mode))){
+        if(query.next()){
+            return query.value(0).toInt();
+        }
+    }
+
+    return ERROR;
+}
+
+void DatabaseManager::deleteUserRecord(int mode)
+{
+    QSqlQuery query;
+
+    query.exec(QString("UPDATE users "
+                       "SET mode%1_best_score = NULL "
+                       "WHERE mode%1_best_score = (SELECT MAX(mode%1_best_score) FROM users)").arg(mode));
 }
 
 

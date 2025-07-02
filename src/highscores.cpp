@@ -1,8 +1,6 @@
 #include "highscores.h"
 #include "ui_highscores.h"
 
-#include <QtDebug>
-
 HighScores::HighScores(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::HighScores)
