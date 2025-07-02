@@ -38,12 +38,9 @@ A modern implementation of the classic Minesweeper game built with Qt and C++, f
 
 ## 📸 Screenshots
 
-<p float="center">
+<p float="left">
 <img src="photos/screen2.png" width=500px height=400px />
 <img src="photos/screen3.png" width=500px height=400px /> 
-</p>
-
-<p align="center">
 <img src="photos/screen5.png" width=500px />
-</p>
+
 
