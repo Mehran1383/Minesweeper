@@ -13,7 +13,7 @@ A modern implementation of the classic Minesweeper game built with Qt and C++, f
 - **Three difficulty levels**:
   - Beginner (9×9 grid with 10 mines)
   - Intermediate (16×16 grid with 40 mines)
-  - Expert (30×16 grid with 99 mines)
+  - Expert (24×24 grid with 99 mines)
   
 - **Custom mode** - Create your own board size and mine count
 - **High score system** - Track your best times for each difficulty
@@ -38,5 +38,9 @@ A modern implementation of the classic Minesweeper game built with Qt and C++, f
 
 ## 📸 Screenshots
 
-## 📜 License
-MIT License - Free to use and modify
+<p float="left">
+<img src="photos/screen2.png" width=500px/>
+<img src="photos/screen3.png" width=500px /> 
+<img src="photos/screen5.png" width=500px />
+
+
