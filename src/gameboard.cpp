@@ -61,6 +61,7 @@ bool GameBoard::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::Resize) {
         resizeButtons();
+        emit windowResized();
     }
 
     if (obj->inherits("QPushButton") && event->type() == QEvent::MouseButtonPress && !logic->isFinished()) {

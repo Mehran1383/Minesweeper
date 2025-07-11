@@ -81,6 +81,12 @@ void MainWindow::init()
     connect(gameBoard, &GameBoard::gameOver, [this](){
         ui->pause->setDisabled(1);
     });
+    connect(gameBoard, &GameBoard::windowResized, [this](){
+        if(timer.isActive()){
+            timer.stop();
+            ui->pause->setText("Resume");
+        }
+    });
     changeFlagCounter();
 }
 

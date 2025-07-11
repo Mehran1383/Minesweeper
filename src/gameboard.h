@@ -32,6 +32,7 @@ signals:
     void flagChanged();
     void userWon();
     void gameOver();
+    void windowResized();
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;

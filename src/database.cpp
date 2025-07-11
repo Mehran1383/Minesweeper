@@ -60,7 +60,7 @@ bool DatabaseManager::addUser(const QString &name, int mode, int score)
     query.prepare(QString("INSERT INTO users (name, mode%1_best_score, mode%1_date_time) VALUES (:username, :best_score, :date_time)").arg(mode));
     query.bindValue(":username", name);
     query.bindValue(":best_score", score);
-    query.bindValue(":date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
+    query.bindValue(":date_time", QDateTime::currentDateTime().toString("yyyy/MM/dd HH:mm"));
 
     if(!query.exec()) {
         qWarning() << "Failed to add user:" << query.lastError().text();
@@ -112,7 +112,8 @@ void DatabaseManager::populateTable(QTableView *view, int mode)
     case 3: model = &model3;
     }
 
-    selectQuery = QString("SELECT ROW_NUMBER() OVER (ORDER BY mode%1_best_score), name, printf('%s:%s', mode%1_best_score / 60, mode%1_best_score % 60), mode%1_date_time "
+    selectQuery = QString("SELECT ROW_NUMBER() OVER (ORDER BY mode%1_best_score, mode%1_date_time), name, "
+                          "printf('%s%s:%s%s', (mode%1_best_score / 60) / 10, (mode%1_best_score / 60) % 10, (mode%1_best_score % 60) / 10, (mode%1_best_score % 60) % 10), mode%1_date_time "
                           "FROM users "
                           "WHERE mode%1_best_score IS NOT NULL").arg(mode);
 
