@@ -13,6 +13,7 @@
 #define USER_FOUND 1
 #define USER_NOT_FOUND 0
 #define ERROR -1
+#define PASSWORD "MinesweeperPass"
 
 class DatabaseManager : public QWidget
 {

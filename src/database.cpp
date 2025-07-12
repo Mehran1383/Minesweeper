@@ -5,10 +5,15 @@
 
 DatabaseManager::DatabaseManager(const QString& databaseName)
 {
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("SQLITECIPHER");
     db.setDatabaseName(databaseName);
+    db.setPassword(PASSWORD);
 
     bool exists = QFile::exists(databaseName);
+    if(!exists){
+        db.setConnectOptions("QSQLITE_USE_CIPHER=sqlcipher");
+        db.setConnectOptions("QSQLITE_CREATE_KEY");
+    }
 
     if(!db.open()){
         qCritical() << "Failed to open database: " << db.lastError().text();
@@ -82,7 +87,7 @@ int DatabaseManager::updateUser(const QString &name, int mode, int score)
             if(score < query.value(1).toInt() || query.isNull(1)){
                 query.prepare(QString("UPDATE users SET mode%1_best_score = :new_best_score, mode%1_date_time = :new_date_time WHERE name = :username").arg(mode));
                 query.bindValue(":new_best_score", score);
-                query.bindValue(":new_date_time", QDateTime::currentDateTime().toString(Qt::ISODate));
+                query.bindValue(":new_date_time", QDateTime::currentDateTime().toString("yyyy/MM/dd HH:mm"));
                 query.bindValue(":username", name);
 
                 if(!query.exec()){

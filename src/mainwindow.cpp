@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Database setup
     QString dbPath = QDir(QCoreApplication::applicationDirPath()).filePath("Minesweeper.db");
+
     dbManager = new DatabaseManager(dbPath);
 
     connect(ui->mode1, &QPushButton::clicked,
