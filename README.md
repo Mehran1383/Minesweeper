@@ -6,6 +6,8 @@
 [![CMake](https://github.com/nholthaus/minesweeper/actions/workflows/build.yml/badge.svg)](https://github.com/nholthaus/minesweeper/actions/workflows/build.yml) 
 [![GitHub Release](https://img.shields.io/github/release/Mehran1383/Minesweeper.svg?style=flat)]()
 
+<img src="photos/splash.jpg">
+
 A modern implementation of the classic Minesweeper game built with Qt and C++, featuring customizable gameplay, and high score tracking.
 
 ## ✨ Features
@@ -38,8 +40,7 @@ A modern implementation of the classic Minesweeper game built with Qt and C++, f
 
 ## 📸 Screenshots
 
-<p float="left">
-<img src="photos/screen2.png" width=500px/>
+<img src="photos/screen2.png" width=500px />
 <img src="photos/screen3.png" width=500px /> 
 <img src="photos/screen5.png" width=500px />
 
