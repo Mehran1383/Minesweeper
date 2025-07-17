@@ -284,12 +284,21 @@ void MainWindow::animateTransition()
     animationNext->setParent(animationGroup);
 
     QStackedWidget* stack = ui->stackedWidget;
-    QObject::connect(animationGroup, &QParallelAnimationGroup::finished, [stack, newIndex, animationGroup]() {
+    QObject::connect(animationGroup, &QParallelAnimationGroup::finished, [this, stack, newIndex, animationGroup]() {
         stack->setCurrentIndex(newIndex);
         animationGroup->deleteLater();
+        ui->mode1->setEnabled(1);
+        ui->mode2->setEnabled(1);
+        ui->mode3->setEnabled(1);
+        ui->customMode->setEnabled(1);
     });
 
     animationGroup->start();
+
+    ui->mode1->setEnabled(0);
+    ui->mode2->setEnabled(0);
+    ui->mode3->setEnabled(0);
+    ui->customMode->setEnabled(0);
 }
 
 
